@@ -32,7 +32,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('adminpanel-guest:admins', ['except' => 'logout']);
+        $this->middleware('bkscms-guest:admins', ['except' => 'logout']);
     }
     
     /**

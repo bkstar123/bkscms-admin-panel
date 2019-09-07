@@ -59,7 +59,7 @@ class AdminPanelServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/bkstar123_bkscms_adminpanel.php', 'bkstar123_bkscms_adminpanel');
 
-        $this->app->singleton('adminpanel-guest', RedirectIfAuthenticated::class);
-        $this->app->singleton('adminpanel-auth', Authenticate::class);
+        $this->app->singleton('bkscms-guest', RedirectIfAuthenticated::class);
+        $this->app->singleton('bkscms-auth', Authenticate::class);
     }
 }
