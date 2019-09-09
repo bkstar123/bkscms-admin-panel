@@ -86,7 +86,7 @@ class LoginController extends Controller
         $this->guard()->logout();
         $request->session()->flush();
         $request->session()->regenerate();
-        \Flashing::success('Successfully signed out from the application');
+        flashing('Successfully signed out from the application')->success()->flash();
         return redirect(config('bkstar123_bkscms_adminpanel.default_unauthenticated_page'));
     }
 
@@ -99,7 +99,7 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
-        \Flashing::success('Successfully signed in to the application');
+        flashing('Successfully signed in to the application')->success()->flash();
         return $this->tryLoginWith($request, 'email') ?: $this->tryLoginWith($request, 'username');
     }
 
