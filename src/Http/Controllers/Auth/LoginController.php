@@ -3,7 +3,7 @@
  * @author: tuanha
  * @last-mod: 02-Sept-2019
  */
-namespace Bkstar123\BksCMS\AdminPanel\Http\Auth;
+namespace Bkstar123\BksCMS\AdminPanel\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -99,8 +99,13 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
-        flashing('Successfully signed in to the application')->success()->flash();
-        return $this->tryLoginWith($request, 'email') ?: $this->tryLoginWith($request, 'username');
+        $authenticated = $this->tryLoginWith($request, 'email') ?: $this->tryLoginWith($request, 'username');
+        if ($authenticated) {
+            flashing('Welcome to the application')->success()->flash();
+        } else {
+            flashing('Invalid login credentials')->error()->flash();
+        }
+        return $authenticated;
     }
 
     /**

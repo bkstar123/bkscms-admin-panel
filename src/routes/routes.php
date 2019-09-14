@@ -9,16 +9,31 @@
  */
 Route::group(
     [
-        'namespace' => 'Bkstar123\BksCMS\AdminPanel\Http\Auth',
+        'prefix' => 'admins',
+        'namespace' => 'Bkstar123\BksCMS\AdminPanel\Http\Controllers\Auth',
         'middleware' => [
             'web',
         ],
     ],
     function () {
-        Route::get('admins/login', 'LoginController@showLoginForm')
+        Route::get('/login', 'LoginController@showLoginForm')
             ->name('admins.login');
-        Route::post('admins/login', 'LoginController@login');
-        Route::post('admins/logout', 'LoginController@logout')
+
+        Route::post('/login', 'LoginController@login');
+
+        Route::post('/logout', 'LoginController@logout')
             ->name('admins.logout');
+
+        Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')
+            ->name('admins.password.request');
+
+        Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')
+            ->name('admins.password.email');
+
+        Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm')
+            ->name('admins.password.reset');
+
+        Route::post('/password/reset', 'ResetPasswordController@reset')
+            ->name('admins.password.update');
     }
 );

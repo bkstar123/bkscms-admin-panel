@@ -7,6 +7,7 @@ namespace Bkstar123\BksCMS\AdminPanel;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Bkstar123\BksCMS\AdminPanel\Notifications\ResetPassword as ResetPasswordNotification;
 
 class Admin extends Authenticatable
 {
@@ -29,4 +30,17 @@ class Admin extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     *
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        flashing('A reset password link has been sent')->success()->flash();
+        $this->notify(new ResetPasswordNotification($token));
+    }
 }
