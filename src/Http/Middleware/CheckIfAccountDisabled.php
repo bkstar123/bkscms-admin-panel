@@ -30,7 +30,7 @@ class CheckIfAccountDisabled
                 ->error()
                 ->flash();
             return back();
-        } 
+        }
         return $next($request);
     }
 }
