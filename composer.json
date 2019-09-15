@@ -22,7 +22,8 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.1.3",
-        "bkstar123/flashing": "^1.0"
+        "bkstar123/flashing": "^1.0",
+        "bkstar123/laravel-recaptcha": "^1.1"
     },
     "autoload": {
         "psr-4": {
