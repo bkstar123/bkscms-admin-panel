@@ -28,7 +28,8 @@ Route::group(
             ->name('admins.password.request');
 
         Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')
-            ->name('admins.password.email');
+            ->name('admins.password.email')
+            ->middleware('bkscms-disabled');
 
         Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm')
             ->name('admins.password.reset');
