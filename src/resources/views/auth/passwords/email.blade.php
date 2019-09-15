@@ -47,10 +47,16 @@
                                     Send Password Reset Link
                                 </button>
                             </div>
-                        </div>
+                        </div>           
                     </form>
                 </div>
             </div>
+            {{ Recaptcha::addClient() }}
+            @error('g-recaptcha-response')
+                <span class="invalid-feedback d-block" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror  
         </div>
     </div>
 </div>
