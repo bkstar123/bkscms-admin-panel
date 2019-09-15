@@ -5,6 +5,7 @@
  */
 namespace Bkstar123\BksCMS\AdminPanel\Http\Middleware;
 
+use Bkstar123\BksCMS\AdminPanel\Admin;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
@@ -25,7 +26,8 @@ class Authenticate extends Middleware
             $guards = [null];
         }
         foreach ($guards as $guard) {
-            if ($this->auth->guard($guard)->check() && $this->auth->guard($guard)->user()->status === 1) {
+            if ($this->auth->guard($guard)->check() && 
+                $this->auth->guard($guard)->user()->status == Admin::ACTIVE) {
                 return $this->auth->shouldUse($guard);
             }
         }

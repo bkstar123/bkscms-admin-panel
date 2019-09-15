@@ -10,6 +10,7 @@ namespace Bkstar123\BksCMS\AdminPanel\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Bkstar123\BksCMS\AdminPanel\Admin;
 
 class RedirectIfAuthenticated
 {
@@ -24,7 +25,7 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         $auth = Auth::guard($guard);
-        if ($auth->check() && $auth->user()->status === 1) {
+        if ($auth->check() && $auth->user()->status == Admin::ACTIVE) {
             return redirect(config('bkstar123_bkscms_adminpanel.default_authenticated_page'));
         }
 

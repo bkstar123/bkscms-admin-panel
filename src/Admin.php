@@ -13,6 +13,10 @@ class Admin extends Authenticatable
 {
     use Notifiable;
 
+    const ACTIVE = true;
+
+    const INACTIVE = false;
+
     /**
      * The attributes that are mass assignable.
      *

@@ -25,7 +25,7 @@ class CheckIfAccountDisabled
     public function handle($request, Closure $next)
     {
         $admin = Admin::where('email', $request->input('email'))->first();
-        if (! empty($admin) && $admin->status == 0) {
+        if (! empty($admin) && $admin->status == Admin::INACTIVE) {
             flashing('Your account is disabled, please contact the system administrator')
                 ->error()
                 ->flash();

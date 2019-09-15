@@ -8,6 +8,7 @@ namespace Bkstar123\BksCMS\AdminPanel\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Bkstar123\BksCMS\AdminPanel\Admin;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -119,7 +120,7 @@ class LoginController extends Controller
     {
         $credentials = $this->credentials($request);
         $credentials[$loginField] = $credentials['user'];
-        $credentials['status'] = 1;
+        $credentials['status'] = Admin::ACTIVE;
         unset($credentials['user']);
         return $this->guard()->attempt($credentials, $request->filled('remember'));
     }
