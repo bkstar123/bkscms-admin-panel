@@ -38,3 +38,20 @@ Route::group(
             ->name('admins.password.update');
     }
 );
+
+/**
+ * Admin management resource routes
+ *
+ */
+Route::group(
+    [
+        'prefix' => 'admins',
+        'namespace' => 'Bkstar123\BksCMS\AdminPanel\Http\Controllers',
+        'middleware' => [
+            'web', 'bkscms-auth:admins',
+        ],
+    ],
+    function () {
+        Route::resource('/', 'AdminController', ['as' => 'admins']);
+    }
+);
