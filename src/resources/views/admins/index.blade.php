@@ -9,18 +9,24 @@
                 <h3 class="card-title">Admins</h3>
 
                 <div class="card-tools">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                        <input type="text" 
-                               name="table_search" 
-                               class="form-control float-right" 
-                               placeholder="Search">
+                    <form role="form"
+                          method="GET"
+                          accept-charset="utf-8"
+                          action="{{ route('admins.index') }}">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" 
+                                   name="search" 
+                                   value="{{ request()->input('search') }}" 
+                                   class="form-control float-right" 
+                                   placeholder="Search">
 
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div><!-- /.card-header -->
             <div class="card-body table-responsive p-0">

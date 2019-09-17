@@ -52,6 +52,16 @@ Route::group(
         ],
     ],
     function () {
-        Route::resource('/', 'AdminController', ['as' => 'admins']);
+        Route::resource('/', 'AdminController', [
+            'names' => [
+                'index' => 'admins.index',
+                'store' => 'admins.store',
+                'create' => 'admins.create',
+                'show' => 'admins.show',
+                'update' => 'admins.update',
+                'destroy' => 'admins.destroy',
+                'edit' => 'admins.edit'
+            ]
+        ]);
     }
 );
