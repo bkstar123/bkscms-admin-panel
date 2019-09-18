@@ -6,16 +6,26 @@
 namespace Bkstar123\BksCMS\AdminPanel;
 
 use Illuminate\Notifications\Notifiable;
+use Bkstar123\BksCMS\Utilities\Traits\FullTextSearch;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Bkstar123\BksCMS\AdminPanel\Notifications\ResetPassword as ResetPasswordNotification;
 
 class Admin extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, FullTextSearch;
 
     const ACTIVE = true;
 
     const INACTIVE = false;
+
+    /**
+     * The columns of the full text index
+     */
+    protected $searchable = [
+        'username',
+        'name',
+        'email'
+    ];
 
     /**
      * The attributes that are mass assignable.
