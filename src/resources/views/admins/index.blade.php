@@ -45,13 +45,14 @@
                             <td>{{ $admin->name }}</td>
                             <td>{{ $admin->username }}</td>
                             <td>{{ $admin->email }}</td>
-                            <td><span class="tag tag-success">{{ $admin->status }}</span></td>
+                            <td>{!! $admin->getStatus() !!}</td>
                         </tr>
                         @endforeach
                   </tbody>
                 </table>
             </div><!-- /.card-body -->
         </div><!-- /.card -->
+        {{ $admins->links() }}
     </div>
 </div>
 @endsection

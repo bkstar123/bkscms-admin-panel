@@ -21,7 +21,7 @@ class Admin extends Authenticatable
     /**
      * List of columns for search enabling
      *
-     * @var array 
+     * @var array
      */
     public static $mysqlSearchable = ['name', 'username', 'email'];
 
@@ -54,5 +54,17 @@ class Admin extends Authenticatable
     {
         flashing('A reset password link has been sent')->success()->flash();
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * Return account status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status ?
+              '<span class="badge bg-green">Active</span>' :
+              '<span class="badge bg-gray">Disabled</span>';
     }
 }

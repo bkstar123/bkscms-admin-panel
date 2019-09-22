@@ -19,7 +19,7 @@ class AdminController extends Controller
         $searchText = request()->input('search');
         try {
             $admins = Admin::search($searchText)
-                    ->paginate(config('bkstar123_bkscms_adminpanel.pageSize'))
+                    ->simplePaginate(config('bkstar123_bkscms_adminpanel.pageSize'))
                     ->appends([
                         'search' => $searchText
                     ]);
