@@ -2,6 +2,7 @@
 
 namespace Bkstar123\BksCMS\AdminPanel\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Bkstar123\BksCMS\AdminPanel\Admin;
@@ -15,8 +16,16 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $admins = Admin::search(request()->input('search'))
-                       ->paginate(config('bkstar123_bkscms_adminpanel.pageSize'));
+        $searchText = request()->input('search');
+        try {
+            $admins = Admin::search($searchText)
+                    ->paginate(config('bkstar123_bkscms_adminpanel.pageSize'))
+                    ->appends([
+                        'search' => $searchText
+                    ]);
+        } catch (Exception $e) {
+            $admins = [];
+        }
         return view('bkstar123_bkscms_adminpanel::admins.index', compact('admins'));
     }
 }
