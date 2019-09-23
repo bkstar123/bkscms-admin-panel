@@ -28,4 +28,42 @@ class AdminController extends Controller
         }
         return view('bkstar123_bkscms_adminpanel::admins.index', compact('admins'));
     }
+
+    /**
+     * Disabling the given admin account
+     */
+    public function offStatus(Admin $admin)
+    {
+        $admin->status = Admin::INACTIVE;
+        try {
+            $admin->save();
+            flashing("The account $admin->email has been successfully disabled")
+                ->success()
+                ->flash();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+        }
+        return back();
+    }
+
+    /**
+     * Enabling the given admin account
+     */
+    public function onStatus(Admin $admin)
+    {
+        $admin->status = Admin::ACTIVE;
+        try {
+            $admin->save();
+            flashing("The account $admin->email has been successfully enabled")
+                ->success()
+                ->flash();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+        }
+        return back();
+    }
 }

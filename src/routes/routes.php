@@ -63,5 +63,10 @@ Route::group(
                 'edit' => 'admins.edit'
             ]
         ]);
+
+        Route::post('/{admin}/disabling', 'AdminController@offStatus')
+            ->name('admins.disabling');
+        Route::post('/{admin}/activating', 'AdminController@onStatus')
+            ->name('admins.activating');
     }
 );
