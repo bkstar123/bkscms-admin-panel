@@ -37,6 +37,7 @@
                             <th>Username</th>
                             <th>Email</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,6 +63,7 @@
                                           method="POST"
                                           style="display: none;">
                                         @csrf
+                                        @method('PATCH')
                                     </form>
                                 @else
                                     <span class="badge bg-gray">
@@ -79,8 +81,63 @@
                                           method="POST"
                                           style="display: none;">
                                         @csrf
+                                        @method('PATCH')
                                     </form>
                                 @endif
+                            </td>
+                            <td>
+                                <span class="badge bg-red">
+                                    <a href="#" 
+                                        class="btn btn-link"
+                                        onclick="event.preventDefault();
+                                        $('#removing-modal-{{ $admin->{$admin->getRouteKeyName()} }}').modal('show')">
+                                        Delete
+                                    </a>
+                                </span>
+                                <div class="modal fade" 
+                                    id="removing-modal-{{ $admin->{$admin->getRouteKeyName()} }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger">
+                                                <h4 class="modal-title">
+                                                    Confirmation - destroy
+                                                </h4>
+                                                <button type="button" 
+                                                    class="close" 
+                                                    data-dismiss="modal" 
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure to perform this action?</p>
+                                                <i>All related data will irreversibly be removed</i>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" 
+                                                    class="btn btn-secondary" 
+                                                    data-dismiss="modal">
+                                                    Cancel
+                                                </button>
+                                                <button type="button" 
+                                                        class="btn btn-outline-light btn-danger"
+                                                        onclick="event.preventDefault();
+                                                        $('#deleting-form-{{ $admin->{$admin->getRouteKeyName()} }}').submit()">
+                                                    Okay
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form id="deleting-form-{{ $admin->{$admin->getRouteKeyName()} }}"
+                                        action="{{ route('admins.destroy', [
+                                            'admin' => $admin->{$admin->getRouteKeyName()}
+                                        ]) }}"
+                                        method="POST"
+                                        style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </td>
                         </tr>
                         @endforeach

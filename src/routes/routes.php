@@ -52,21 +52,18 @@ Route::group(
         ],
     ],
     function () {
-        Route::resource('/', 'AdminController', [
-            'names' => [
-                'index' => 'admins.index',
-                'store' => 'admins.store',
-                'create' => 'admins.create',
-                'show' => 'admins.show',
-                'update' => 'admins.update',
-                'destroy' => 'admins.destroy',
-                'edit' => 'admins.edit'
-            ]
-        ]);
+        Route::match(['get', 'head'], '/', 'AdminController@index')->name('admins.index');
+        Route::post('/', 'AdminController@store')->name('admins.store');
+        Route::match(['get', 'head'], '/create', 'AdminController@create')->name('admins.create');
+        Route::match(['get', 'head'], '/{admin}', 'AdminController@show')->name('admins.show');
+        Route::match(['put', 'patch'], '/{admin}', 'AdminController@update')->name('admins.update');
+        Route::delete('/{admin}', 'AdminController@destroy')->name('admins.destroy');
+        Route::match(['get', 'head'], '/{admin}/edit', 'AdminController@edit')->name('admins.edit');
 
-        Route::post('/{admin}/disabling', 'AdminController@offStatus')
+
+        Route::patch('/{admin}/disabling', 'AdminController@offStatus')
             ->name('admins.disabling');
-        Route::post('/{admin}/activating', 'AdminController@onStatus')
+        Route::patch('/{admin}/activating', 'AdminController@onStatus')
             ->name('admins.activating');
     }
 );

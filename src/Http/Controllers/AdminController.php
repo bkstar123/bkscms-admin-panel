@@ -30,6 +30,27 @@ class AdminController extends Controller
     }
 
     /**
+     * Destroy a resource
+     *
+     * @param \Blstar123\BksCMS\AdminPanel\Admin $admin
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Admin $admin)
+    {
+        try {
+            $admin->delete();
+            flashing("The account $admin->email has been successfully removed")
+                ->success()
+                ->flash();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+        }
+        return back();
+    }
+
+    /**
      * Disabling the given admin account
      */
     public function offStatus(Admin $admin)
