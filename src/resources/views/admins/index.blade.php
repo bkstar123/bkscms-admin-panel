@@ -98,17 +98,7 @@
                     <thead>
                         <tr style="background-color: #4681AF; color: white">
                             <th>
-                                <div class="icheck-danger">
-                                    <input type="checkbox" id="check-all">
-                                    <label for="check-all"></label>
-                                </div>
-                                <script>
-                                    $("#check-all").change(() => {
-                                        $("#check-all").prop('checked') ? 
-                                        $('.item-check').prop('checked', true) : 
-                                        $('.item-check').prop('checked', false);
-                                    });
-                                </script>
+                                {{ CrudView::checkAllBtn('danger') }}
                             </th>
                             <th>Name</th>
                             <th>Username</th>
@@ -121,54 +111,20 @@
                         @foreach($admins as $admin)
                         <tr>
                             <td>
-                                <div class="icheck-danger">
-                                    <input type="checkbox" 
-                                        class="item-check"
-                                        value = "{{ $admin->{$admin->getRouteKeyName()} }}"
-                                        id="item-check-{{ $admin->{$admin->getRouteKeyName()} }}">
-                                    <label for="item-check-{{ $admin->{$admin->getRouteKeyName()} }}"></label>
-                                </div>
+                                {{ CrudView::checkBtn($admin, 'danger') }}
                             </td>
                             <td>{{ $admin->name }}</td>
                             <td>{{ $admin->username }}</td>
                             <td>{{ $admin->email }}</td>
                             <td>
                                 @if($admin->status)
-                                    <span class="badge bg-green">
-                                        <a href="#" 
-                                           class="btn btn-link"
-                                           onclick="event.preventDefault();
-                                           $('#disabling-form-{{ $admin->{$admin->getRouteKeyName()} }}').submit()">
-                                            Active
-                                        </a>
-                                    </span>
-                                    <form id="disabling-form-{{ $admin->{$admin->getRouteKeyName()} }}"
-                                          action="{{ route('admins.disabling', [
-                                                'admin' => $admin->{$admin->getRouteKeyName()}
-                                            ]) }}"
-                                          method="POST"
-                                          style="display: none;">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
+                                    {{ CrudView::activeStatus($admin, route('admins.disabling', [
+                                        'admin' => $admin->{$admin->getRouteKeyName()}
+                                        ])) }}
                                 @else
-                                    <span class="badge bg-gray">
-                                        <a href="#" 
-                                           class="btn btn-link"
-                                           onclick="event.preventDefault();
-                                           $('#activating-form-{{ $admin->{$admin->getRouteKeyName()} }}').submit()">
-                                            Disabled
-                                        </a>
-                                    </span>
-                                    <form id="activating-form-{{ $admin->{$admin->getRouteKeyName()} }}"
-                                          action="{{ route('admins.activating', [
-                                                'admin' => $admin->{$admin->getRouteKeyName()}
-                                            ]) }}"
-                                          method="POST"
-                                          style="display: none;">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
+                                    {{ CrudView::disabledStatus($admin, route('admins.activating', [
+                                        'admin' => $admin->{$admin->getRouteKeyName()}
+                                        ])) }}
                                 @endif
                             </td>
                             <td>
