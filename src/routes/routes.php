@@ -65,5 +65,7 @@ Route::group(
             ->name('admins.disabling');
         Route::patch('/{admin}/activating', 'AdminController@onStatus')
             ->name('admins.activating');
+        Route::delete('/', 'AdminController@massiveDestroy')
+            ->name('admins.massiveDestroy');
     }
 );

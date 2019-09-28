@@ -49,6 +49,27 @@ class AdminController extends Controller
         }
         return back();
     }
+    
+    /**
+     * Destroy multiple resources
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function massiveDestroy()
+    {
+        $Ids = explode(',', request()->input('Ids'));
+        try {
+            Admin::destroy($Ids);
+            flashing('All selected resources have been removed')
+                ->success()
+                ->flash();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+        }
+        return back();
+    }
 
     /**
      * Disabling the given admin account
