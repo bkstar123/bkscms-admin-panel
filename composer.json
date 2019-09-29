@@ -24,6 +24,7 @@
         "php": "^7.1.3",
         "bkstar123/flashing": "^1.0",
         "bkstar123/laravel-recaptcha": "^1.1",
+        "bkstar123/log-enhancer": "^1.0",
         "bkstar123/mysql-search": "^1.0",
         "bkstar123/bkscms-utilities": "^1.0"
     },
