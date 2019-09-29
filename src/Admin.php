@@ -55,4 +55,9 @@ class Admin extends Authenticatable
         flashing('A reset password link has been sent')->success()->flash();
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
 }
