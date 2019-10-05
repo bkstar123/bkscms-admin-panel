@@ -3,9 +3,9 @@
 namespace Bkstar123\BksCMS\AdminPanel\Http\Controllers;
 
 use Exception;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Bkstar123\BksCMS\AdminPanel\Admin;
+use Bkstar123\BksCMS\AdminPanel\Http\Requests\StoreAdmin;
 
 class AdminController extends Controller
 {
@@ -27,6 +27,49 @@ class AdminController extends Controller
             $admins = [];
         }
         return view('bkstar123_bkscms_adminpanel::admins.index', compact('admins'));
+    }
+
+    /**
+     * Show create form
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('bkstar123_bkscms_adminpanel::admins.create');
+    }
+
+    /**
+     * Store a resource
+     *
+     * @param \Bkstar123\BksCMS\AdminPanel\Http\Requests\StoreAdmin $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreAdmin $request)
+    {
+        try {
+            $admin = Admin::create($request->all());
+            flashing("New admin account for $admin->email has been created")
+                ->success()
+                ->flash();
+            return back();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+            return back();
+        }
+    }
+
+    /**
+     * Show a resource
+     *
+     * @param 
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Admin $admin)
+    {
+        return view('bkstar123_bkscms_adminpanel::admins.show', compact('admin'));
     }
 
     /**
@@ -73,6 +116,9 @@ class AdminController extends Controller
 
     /**
      * Disabling the given admin account
+     * 
+     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
+     * @return \Illuminate\Http\Response
      */
     public function offStatus(Admin $admin)
     {
@@ -92,6 +138,9 @@ class AdminController extends Controller
 
     /**
      * Enabling the given admin account
+     *
+     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
+     * @return \Illuminate\Http\Response
      */
     public function onStatus(Admin $admin)
     {

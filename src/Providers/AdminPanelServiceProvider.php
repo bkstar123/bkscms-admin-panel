@@ -35,6 +35,8 @@ class AdminPanelServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/routes.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'bkstar123_bkscms_adminpanel');
 
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/bkstar123_bkscms_adminpanel'),
         ], 'bkstar123_bkscms_adminpanel.views');

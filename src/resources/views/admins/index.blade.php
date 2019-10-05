@@ -34,9 +34,27 @@
                             <td>
                                 {{ CrudView::checkBox($admin, 'danger') }}
                             </td>
-                            <td>{{ $admin->name }}</td>
-                            <td>{{ $admin->username }}</td>
-                            <td>{{ $admin->email }}</td>
+                            <td>
+                                <a href="{{ route('admins.show', [
+                                        'admin' => $admin->{$admin->getRouteKeyName()}
+                                        ]) }}">
+                                    {{ $admin->name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('admins.show', [
+                                        'admin' => $admin->{$admin->getRouteKeyName()}
+                                        ]) }}">
+                                    {{ $admin->username }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('admins.show', [
+                                        'admin' => $admin->{$admin->getRouteKeyName()}
+                                        ]) }}">
+                                    {{ $admin->email }}
+                                </a>
+                            </td>
                             <td>
                                 @if($admin->status)
                                     {{ CrudView::activeStatus($admin, route('admins.disabling', [
@@ -59,6 +77,7 @@
                 </table>
             </div><!-- /.card-body -->
         </div><!-- /.card -->
+        Shows {{ $admins->count() }} result(s)
         {{ $admins->links() }}
     </div>
 </div>

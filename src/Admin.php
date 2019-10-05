@@ -5,6 +5,7 @@
  */
 namespace Bkstar123\BksCMS\AdminPanel;
 
+use Bkstar123\BksCMS\AdminPanel\Profile;
 use Illuminate\Notifications\Notifiable;
 use Bkstar123\MySqlSearch\Traits\MySqlSearch;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -31,7 +32,7 @@ class Admin extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'name', 'email', 'password',
     ];
 
     /**
@@ -55,9 +56,24 @@ class Admin extends Authenticatable
         flashing('A reset password link has been sent')->success()->flash();
         $this->notify(new ResetPasswordNotification($token));
     }
-
+    
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
     public function getRouteKeyName()
     {
         return 'username';
+    }
+
+    /**
+     * An admin has one profile
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
     }
 }
