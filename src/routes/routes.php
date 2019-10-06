@@ -52,14 +52,13 @@ Route::group(
         ],
     ],
     function () {
-        Route::match(['get', 'head'], '/', 'AdminController@index')->name('admins.index');
+        Route::get('/', 'AdminController@index')->name('admins.index');
         Route::post('/', 'AdminController@store')->name('admins.store');
-        Route::match(['get', 'head'], '/create', 'AdminController@create')->name('admins.create');
-        Route::match(['get', 'head'], '/{admin}', 'AdminController@show')->name('admins.show');
-        Route::match(['put', 'patch'], '/{admin}', 'AdminController@update')->name('admins.update');
+        Route::get('/create', 'AdminController@create')->name('admins.create');
+        Route::get('/{admin}', 'AdminController@show')->name('admins.show');
+        Route::patch('/{admin}', 'AdminProfileController@update')
+            ->name('admins.profile.update');
         Route::delete('/{admin}', 'AdminController@destroy')->name('admins.destroy');
-        Route::match(['get', 'head'], '/{admin}/edit', 'AdminController@edit')->name('admins.edit');
-
 
         Route::patch('/{admin}/disabling', 'AdminController@offStatus')
             ->name('admins.disabling');
@@ -67,5 +66,9 @@ Route::group(
             ->name('admins.activating');
         Route::delete('/', 'AdminController@massiveDestroy')
             ->name('admins.massiveDestroy');
+        Route::patch('/{admin}/change-password', 'AdminController@changePassword')
+            ->name('admins.password.change');
+        Route::post('/upload-avatar', 'AdminProfileController@uploadAvatar')
+            ->name('admins.avatar.upload');
     }
 );

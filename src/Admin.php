@@ -5,6 +5,7 @@
  */
 namespace Bkstar123\BksCMS\AdminPanel;
 
+use Illuminate\Support\Facades\DB;
 use Bkstar123\BksCMS\AdminPanel\Profile;
 use Illuminate\Notifications\Notifiable;
 use Bkstar123\MySqlSearch\Traits\MySqlSearch;
@@ -75,5 +76,34 @@ class Admin extends Authenticatable
     public function profile()
     {
         return $this->hasOne(Profile::class);
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+        DB::transaction(function () {
+            static::deleting(function ($admin) {
+                $admin->profile()->delete();
+            });
+        }, 3);
+    }
+
+    public function getAvatar()
+    {
+        return [
+            'custom' => isset($this->profile->avatar_url) &&
+                        !empty($this->profile->avatar_url) ? true : false,
+            'avatar_url' => isset($this->profile->avatar_url) &&
+                            !empty($this->profile->avatar_url) ?
+                            $this->profile->avatar_url :
+                            '/img/default-avatar-160x160.jpg',
+            'avatar_path' => $this->profile->avatar_path ?? '',
+            'avatar_disk' => $this->profile->avatar_disk ?? ''
+        ];
     }
 }

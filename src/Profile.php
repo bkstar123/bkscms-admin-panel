@@ -16,7 +16,7 @@ class Profile extends Model
      * @var array
      */
     protected $fillable = [
-        'avatar_url', 'avatar_path', 'avatar_disk', 'mobile', 'slack_webhook_url'
+        'mobile', 'slack_webhook_url', 'avatar_url', 'avatar_path', 'avatar_disk'
     ];
 
     /**

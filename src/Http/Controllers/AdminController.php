@@ -1,11 +1,18 @@
 <?php
-
+/**
+ * AdminController
+ *
+ * @author: tuanha
+ * @last-mod: 06-Oct-2019
+ */
 namespace Bkstar123\BksCMS\AdminPanel\Http\Controllers;
 
 use Exception;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Bkstar123\BksCMS\AdminPanel\Admin;
 use Bkstar123\BksCMS\AdminPanel\Http\Requests\StoreAdmin;
+use Bkstar123\BksCMS\AdminPanel\Http\Requests\ChangePassword;
 
 class AdminController extends Controller
 {
@@ -64,12 +71,34 @@ class AdminController extends Controller
     /**
      * Show a resource
      *
-     * @param 
+     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function show(Admin $admin)
     {
         return view('bkstar123_bkscms_adminpanel::admins.show', compact('admin'));
+    }
+
+    /**
+     * Update a resource
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Admin $admin)
+    {
+        try {
+            $admin->update($request->all());
+            flashing("The profile of $admin->name has been successfully updated")
+                ->success()
+                ->flash();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+        }
+        return back();
     }
 
     /**
@@ -90,7 +119,9 @@ class AdminController extends Controller
                 ->error()
                 ->flash();
         }
-        return back();
+        return back()->getTargetUrl() != route('admins.show', [
+            'admin' => $admin->{$admin->getRouteKeyName()}
+        ]) ? back() : redirect()->route('admins.index');
     }
     
     /**
@@ -116,7 +147,7 @@ class AdminController extends Controller
 
     /**
      * Disabling the given admin account
-     * 
+     *
      * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
      * @return \Illuminate\Http\Response
      */
@@ -148,6 +179,29 @@ class AdminController extends Controller
         try {
             $admin->save();
             flashing("The account $admin->email has been successfully enabled")
+                ->success()
+                ->flash();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+        }
+        return back();
+    }
+
+    /**
+     * Update password
+     *
+     * @param \Bkstar123\BksCMS\AdminPanel\Http\Requests\ChangePassword $request
+     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
+     * @return \Illuminate\Http\Response
+     */
+    public function changePassword(ChangePassword $request, Admin $admin)
+    {
+        $admin->password = bcrypt($request->password);
+        try {
+            $admin->save();
+            flashing("The password for account $admin->email has been successfully updated")
                 ->success()
                 ->flash();
         } catch (Exception $e) {

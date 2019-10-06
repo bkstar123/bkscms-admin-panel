@@ -15,15 +15,13 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('avatar_url')->nullable()->default(NULL);
-            $table->string('avatar_path')->nullable()->default(NULL);
-            $table->string('avatar_disk')->nullable()->default(NULL);
-            $table->bigInteger('admin_id');
-            $table->string('mobile')->nullable()->default(NULL);
-            $table->string('slack_webhook_url')->nullable()->default(NULL);
+            $table->string('avatar_url')->nullable()->default(null);
+            $table->string('avatar_path')->nullable()->default(null);
+            $table->string('avatar_disk')->nullable()->default(null);
+            $table->bigInteger('admin_id')->unique();
+            $table->string('mobile')->nullable()->default(null);
+            $table->string('slack_webhook_url')->nullable()->default(null);
             $table->timestamps();
-
-            $table->index('admin_id');
         });
     }
 
