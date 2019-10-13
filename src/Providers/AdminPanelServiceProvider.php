@@ -7,6 +7,8 @@ namespace Bkstar123\BksCMS\AdminPanel\Providers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Bkstar123\BksCMS\AdminPanel\Admin;
+use Bkstar123\BksCMS\AdminPanel\Observers\AdminObserver;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\Authenticate;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\CheckIfAccountDisabled;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\RedirectIfAuthenticated;
@@ -51,6 +53,8 @@ class AdminPanelServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('authAdmin', Auth::guard('admins')->user());
         });
+
+        Admin::observe(AdminObserver::class);
     }
 
     /**

@@ -78,37 +78,12 @@ class Admin extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-        static::deleting(function ($admin) {
-            $profile = $admin->profile;
-            if (!is_null($profile)) {
-                if ($profile->delete()) {
-                    $fileupload = app(FileUpload::class);
-                    $fileupload->delete($profile->avatar_disk, $profile->avatar_path);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-    }
-
     public function getAvatar()
     {
+        $hasCustomAvatar = isset($this->profile->avatar_url) && !empty($this->profile->avatar_url);
         return [
-            'custom' => isset($this->profile->avatar_url) &&
-                        !empty($this->profile->avatar_url) ? true : false,
-            'avatar_url' => isset($this->profile->avatar_url) &&
-                            !empty($this->profile->avatar_url) ?
-                            $this->profile->avatar_url :
-                            '/img/default-avatar-160x160.jpg',
+            'custom' => $hasCustomAvatar ? true : false,
+            'avatar_url' => $hasCustomAvatar ? $this->profile->avatar_url : '/img/default-avatar-160x160.jpg',
             'avatar_path' => $this->profile->avatar_path ?? '',
             'avatar_disk' => $this->profile->avatar_disk ?? ''
         ];
