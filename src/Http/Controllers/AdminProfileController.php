@@ -48,8 +48,8 @@ class AdminProfileController extends Controller
     public function uploadAvatar(Request $request, FileUpload $fileupload)
     {
         $res = $fileupload->handle($request, 'avatar', [
-            'allowedExtensions' => ['jpg', 'png', 'jpeg'],
-            'maxFileSize' => 5242880 // 5MB
+            'allowedExtensions' => config('bkstar123_bkscms_adminpanel.avatarAllowedExtensions'),
+            'maxFileSize' => config('bkstar123_bkscms_adminpanel.avatarMaxSize')
 
         ]);
         if (!$res) {
@@ -57,15 +57,17 @@ class AdminProfileController extends Controller
                 'error' => $fileupload->uploadError
             ], 422);
         }
-        $data['avatar_url'] = $res['url'];
-        $data['avatar_path'] = $res['path'];
-        $data['avatar_disk'] = $res['disk'];
-        $oldAvatar = auth()->guard('admins')->user()->getAvatar();
+        $data = [
+            'avatar_url' => $res['url'],
+            'avatar_path' => $res['path'],
+            'avatar_disk' => $res['disk']
+        ];
+        $currentAvatar = auth()->guard('admins')->user()->getAvatar();
         auth()->guard('admins')->user()->profile()->updateOrCreate([
              'admin_id' => auth()->guard('admins')->id()
         ], $data);
-        if ($oldAvatar['custom']) {
-            $fileupload->delete($oldAvatar['avatar_disk'], $oldAvatar['avatar_path']);
+        if ($currentAvatar['custom']) {
+            $fileupload->delete($currentAvatar['avatar_disk'], $currentAvatar['avatar_path']);
         }
         return response()->json([
             'success' => "{$res['filename']} has been successfully uploaded",

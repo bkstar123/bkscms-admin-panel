@@ -5,10 +5,10 @@
  */
 namespace Bkstar123\BksCMS\AdminPanel;
 
-use Illuminate\Support\Facades\DB;
 use Bkstar123\BksCMS\AdminPanel\Profile;
 use Illuminate\Notifications\Notifiable;
 use Bkstar123\MySqlSearch\Traits\MySqlSearch;
+use Bkstar123\LaravelUploader\Contracts\FileUpload;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Bkstar123\BksCMS\AdminPanel\Notifications\ResetPassword as ResetPasswordNotification;
 
@@ -86,11 +86,18 @@ class Admin extends Authenticatable
     public static function boot()
     {
         parent::boot();
-        DB::transaction(function () {
-            static::deleting(function ($admin) {
-                $admin->profile()->delete();
-            });
-        }, 3);
+        static::deleting(function ($admin) {
+            $profile = $admin->profile;
+            if (!is_null($profile)) {
+                if ($profile->delete()) {
+                    $fileupload = app(FileUpload::class);
+                    $fileupload->delete($profile->avatar_disk, $profile->avatar_path);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
     }
 
     public function getAvatar()

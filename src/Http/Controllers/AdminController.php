@@ -55,7 +55,9 @@ class AdminController extends Controller
     public function store(StoreAdmin $request)
     {
         try {
-            $admin = Admin::create($request->all());
+            $data = $request->all();
+            $data['password'] = bcrypt($request->password);
+            $admin = Admin::create($data);
             flashing("New admin account for $admin->email has been created")
                 ->success()
                 ->flash();

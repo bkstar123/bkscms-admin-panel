@@ -198,11 +198,11 @@
 <script type="text/javascript">
 $(document).ready(function () {
     $('#avatar').bkstar123_ajaxuploader({
-        size: 5242880, // 5MB
-        allowedExtensions: ['png','jpg','jpeg'],
+        size: {{ config('bkstar123_bkscms_adminpanel.avatarMaxSize') }},
+        allowedExtensions: {!! json_encode(config('bkstar123_bkscms_adminpanel.avatarAllowedExtensions')) !!},
         batchSize: 1,
         outerClass: 'col-md-12',
-        uploadUrl: '/admins/upload-avatar',
+        uploadUrl: '{{ route('admins.avatar.upload') }}',
         onResponse: (response) => {
             let res = JSON.parse(response)
             if (res.data) {
