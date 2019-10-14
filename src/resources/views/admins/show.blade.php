@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <!-- Profile Image -->
         <div class="card card-primary card-outline">
             <div class="card-body box-profile">
@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card">
             <div class="card-header p-2">
                 <ul class="nav nav-pills">
@@ -92,6 +92,13 @@
                         </a>
                     </li>
                     @endif
+                    <li class="nav-item">
+                        <a class="nav-link" 
+                           href="#role-assignment" 
+                           data-toggle="tab">
+                            Authorization Roles 
+                        </a>
+                    </li>
                 </ul>
             </div><!-- /.card-header -->
             <div class="card-body">
@@ -128,7 +135,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-10">
                                     <button type="submit" 
-                                            class="btn btn-danger">
+                                            class="btn btn-primary">
                                         Submit
                                     </button>
                                 </div>
@@ -172,8 +179,8 @@
                             <div class="form-group row">
                                 <div class="col-sm-10">
                                     <button type="submit" 
-                                            class="btn btn-danger">
-                                        Update Password
+                                            class="btn btn-primary">
+                                        Submit
                                     </button>
                                 </div>
                             </div>
@@ -187,6 +194,77 @@
                                id="avatar">
                     </div>
                     @endif
+                    <div class="tab-pane" id="role-assignment">
+                        <form id="multiselect-form" 
+                              method="POST" 
+                              action="{{ route('admins.roles.assign', [
+                                'admin' => $admin->{$admin->getRouteKeyName()}
+                                ]) }}">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label for="multiselect">
+                                        Available Roles
+                                    </label>
+                                    <select name="from[]" 
+                                            id="multiselect" 
+                                            class="form-control" 
+                                            size="8" 
+                                            multiple="multiple">
+                                        @foreach($admin->getRoles()['available'] as $roleId => $roleName)
+                                            <option value="{{ $roleId }}">
+                                                {{ $roleName }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" 
+                                            id="multiselect_rightAll" 
+                                            class="btn btn-sm btn-primary btn-block">
+                                        <i class="fa fa-forward" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" 
+                                            id="multiselect_rightSelected" 
+                                            class="btn btn-sm btn-primary btn-block">
+                                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" 
+                                            id="multiselect_leftSelected" 
+                                            class="btn btn-sm btn-primary btn-block">
+                                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" 
+                                            id="multiselect_leftAll" 
+                                            class="btn btn-sm btn-primary btn-block">
+                                        <i class="fa fa-backward" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="submit" 
+                                            class="btn btn-sm btn-block btn-success"
+                                            onclick="event.preventDefault();
+                                            $('#multiselect-form').submit();">
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="multiselect_to">
+                                        Assigned Roles
+                                    </label>
+                                    <select name="to[]" 
+                                            id="multiselect_to" 
+                                            class="form-control" 
+                                            size="8" 
+                                            multiple="multiple">
+                                        @foreach($admin->getRoles()['assigned'] as $roleId => $roleName)
+                                            <option value="{{ $roleId }}">
+                                                {{ $roleName }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -197,7 +275,15 @@
 @push('scriptBottom')
 <script type="text/javascript">
 $(document).ready(function () {
-    $('#avatar').bkstar123_ajaxuploader({
+    $('#multiselect').multiselect({
+        search: {
+            left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+            right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+        }
+    });
+    
+    @if(auth()->guard('admins')->user()->id === $admin->id)
+        $('#avatar').bkstar123_ajaxuploader({
         size: {{ config('bkstar123_bkscms_adminpanel.avatarMaxSize') }},
         allowedExtensions: {!! json_encode(config('bkstar123_bkscms_adminpanel.avatarAllowedExtensions')) !!},
         batchSize: 1,
@@ -211,6 +297,7 @@ $(document).ready(function () {
             }
         }
     });
+    @endif
 });
 </script>
 @endpush

@@ -1,6 +1,6 @@
 <?php
 /**
- * ResetPassword
+ * ResetPassword Notification
  *
  * @author: tuanha
  * @last-mod: 14-Sept-2019

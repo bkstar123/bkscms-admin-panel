@@ -7,8 +7,12 @@ namespace Bkstar123\BksCMS\AdminPanel\Providers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Admin;
+use Bkstar123\BksCMS\AdminPanel\Profile;
+use Bkstar123\BksCMS\AdminPanel\Observers\RoleObserver;
 use Bkstar123\BksCMS\AdminPanel\Observers\AdminObserver;
+use Bkstar123\BksCMS\AdminPanel\Observers\ProfileObserver;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\Authenticate;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\CheckIfAccountDisabled;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\RedirectIfAuthenticated;
@@ -55,6 +59,8 @@ class AdminPanelServiceProvider extends ServiceProvider
         });
 
         Admin::observe(AdminObserver::class);
+        Role::observe(RoleObserver::class);
+        Profile::observe(ProfileObserver::class);
     }
 
     /**

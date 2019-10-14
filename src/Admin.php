@@ -5,6 +5,7 @@
  */
 namespace Bkstar123\BksCMS\AdminPanel;
 
+use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Profile;
 use Illuminate\Notifications\Notifiable;
 use Bkstar123\MySqlSearch\Traits\MySqlSearch;
@@ -19,6 +20,13 @@ class Admin extends Authenticatable
     const ACTIVE = true;
 
     const INACTIVE = false;
+
+    /**
+     * List of default eager loading relationships
+     *
+     * @var array
+     */
+    protected $with = ['profile'];
 
     /**
      * List of columns for search enabling
@@ -78,6 +86,43 @@ class Admin extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
+    /**
+     * The roles that belong to the admin
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'admin_role');
+    }
+
+    /**
+     * Scope a query to only include active admins.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status', static::ACTIVE);
+    }
+
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @return string
+     */
+    public function routeNotificationForSlack()
+    {
+        return $this->profile->slack_webhook_url ?? null;
+    }
+
+    /**
+     * Get admin avatar - return either default or custom avatar
+     *
+     * @return string
+     */
     public function getAvatar()
     {
         $hasCustomAvatar = isset($this->profile->avatar_url) && !empty($this->profile->avatar_url);
@@ -86,6 +131,22 @@ class Admin extends Authenticatable
             'avatar_url' => $hasCustomAvatar ? $this->profile->avatar_url : '/img/default-avatar-160x160.jpg',
             'avatar_path' => $this->profile->avatar_path ?? '',
             'avatar_disk' => $this->profile->avatar_disk ?? ''
+        ];
+    }
+
+    /**
+     * Get all available roles & assigned roles for the given admin
+     *
+     * @return array
+     */
+    public function getRoles()
+    {
+        $assignedRoles = $this->roles()->enabled()->get()->pluck('role', 'id')->toArray();
+        $allRoles = Role::enabled()->get()->pluck('role', 'id')->toArray();
+        $availableRoles = array_diff($allRoles, $assignedRoles);
+        return [
+            'available' => $availableRoles,
+            'assigned' => $assignedRoles
         ];
     }
 }

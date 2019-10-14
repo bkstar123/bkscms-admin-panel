@@ -1,6 +1,6 @@
 <?php
 /**
- * AdminObserver.php
+ * AdminObserver Observer
  * Listening to the Admin model events
  *
  * @author: tuanha
@@ -10,7 +10,6 @@ namespace Bkstar123\BksCMS\AdminPanel\Observers;
 
 use Illuminate\Support\Facades\DB;
 use Bkstar123\BksCMS\AdminPanel\Admin;
-use Bkstar123\LaravelUploader\Contracts\FileUpload;
 
 class AdminObserver
 {
@@ -23,11 +22,10 @@ class AdminObserver
     public function deleting(Admin $admin)
     {
         DB::transaction(function () use ($admin) {
+            $admin->roles()->detach();
             $profile = $admin->profile;
             if (!is_null($profile)) {
                 $profile->delete();
-                $fileupload = app(FileUpload::class);
-                $fileupload->delete($profile->avatar_disk, $profile->avatar_path);
             }
         });
     }

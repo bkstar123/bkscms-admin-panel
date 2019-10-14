@@ -9,32 +9,32 @@
  */
 Route::group(
     [
-        'prefix' => 'admins',
+        'prefix' => 'cms',
         'namespace' => 'Bkstar123\BksCMS\AdminPanel\Http\Controllers\Auth',
         'middleware' => [
             'web',
         ],
     ],
     function () {
-        Route::get('/login', 'LoginController@showLoginForm')
+        Route::get('/admins/login', 'LoginController@showLoginForm')
             ->name('admins.login');
 
-        Route::post('/login', 'LoginController@login');
+        Route::post('/admins/login', 'LoginController@login');
 
-        Route::post('/logout', 'LoginController@logout')
+        Route::post('/admins/logout', 'LoginController@logout')
             ->name('admins.logout');
 
-        Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')
+        Route::get('/admins/password/reset', 'ForgotPasswordController@showLinkRequestForm')
             ->name('admins.password.request');
 
-        Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')
+        Route::post('/admins/password/email', 'ForgotPasswordController@sendResetLinkEmail')
             ->name('admins.password.email')
             ->middleware('bkscms-disabled');
 
-        Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm')
+        Route::get('/admins/password/reset/{token}', 'ResetPasswordController@showResetForm')
             ->name('admins.password.reset');
 
-        Route::post('/password/reset', 'ResetPasswordController@reset')
+        Route::post('/admins/password/reset', 'ResetPasswordController@reset')
             ->name('admins.password.update');
     }
 );
@@ -45,30 +45,78 @@ Route::group(
  */
 Route::group(
     [
-        'prefix' => 'admins',
+        'prefix' => 'cms',
         'namespace' => 'Bkstar123\BksCMS\AdminPanel\Http\Controllers',
         'middleware' => [
             'web', 'bkscms-auth:admins',
         ],
     ],
     function () {
-        Route::get('/', 'AdminController@index')->name('admins.index');
-        Route::post('/', 'AdminController@store')->name('admins.store');
-        Route::get('/create', 'AdminController@create')->name('admins.create');
-        Route::get('/{admin}', 'AdminController@show')->name('admins.show');
-        Route::patch('/{admin}', 'AdminProfileController@update')
+        Route::get('/admins', 'AdminController@index')->name('admins.index');
+        Route::post('/admins', 'AdminController@store')->name('admins.store');
+        Route::get('/admins/create', 'AdminController@create')->name('admins.create');
+        Route::get('/admins/{admin}', 'AdminController@show')->name('admins.show');
+        Route::patch('/admins/{admin}', 'AdminProfileController@update')
             ->name('admins.profile.update');
-        Route::delete('/{admin}', 'AdminController@destroy')->name('admins.destroy');
+        Route::delete('/admins/{admin}', 'AdminController@destroy')->name('admins.destroy');
 
-        Route::patch('/{admin}/disabling', 'AdminController@offStatus')
+        Route::patch('/admins/{admin}/disabling', 'AdminController@offStatus')
             ->name('admins.disabling');
-        Route::patch('/{admin}/activating', 'AdminController@onStatus')
+        Route::patch('/admins/{admin}/activating', 'AdminController@onStatus')
             ->name('admins.activating');
-        Route::delete('/', 'AdminController@massiveDestroy')
+        Route::delete('/admins', 'AdminController@massiveDestroy')
             ->name('admins.massiveDestroy');
-        Route::patch('/{admin}/change-password', 'AdminController@changePassword')
+        Route::patch('/admins/{admin}/change-password', 'AdminController@changePassword')
             ->name('admins.password.change');
-        Route::post('/upload-avatar', 'AdminProfileController@uploadAvatar')
+        Route::post('/admins/upload-avatar', 'AdminProfileController@uploadAvatar')
             ->name('admins.avatar.upload');
+    }
+);
+
+/**
+ * Role management resource routes
+ *
+ */
+Route::group(
+    [
+        'prefix' => 'cms',
+        'namespace' => 'Bkstar123\BksCMS\AdminPanel\Http\Controllers',
+        'middleware' => [
+            'web', 'bkscms-auth:admins',
+        ],
+    ],
+    function () {
+        Route::get('/roles', 'RoleController@index')->name('roles.index');
+        Route::post('/roles', 'RoleController@store')->name('roles.store');
+        Route::get('/roles/create', 'RoleController@create')->name('roles.create');
+        Route::get('/roles/{role}', 'RoleController@show')->name('roles.show');
+        Route::patch('/roles/{role}', 'RoleController@update')
+            ->name('roles.update');
+        Route::delete('/roles/{role}', 'RoleController@destroy')->name('roles.destroy');
+
+        Route::patch('/roles/{role}/disabling', 'RoleController@offStatus')
+            ->name('roles.disabling');
+        Route::patch('/roles/{role}/activating', 'RoleController@onStatus')
+            ->name('roles.activating');
+        Route::delete('/roles', 'RoleController@massiveDestroy')
+            ->name('roles.massiveDestroy');
+    }
+);
+
+/**
+ * Role assignment routes
+ *
+ */
+Route::group(
+    [
+        'prefix' => 'cms',
+        'namespace' => 'Bkstar123\BksCMS\AdminPanel\Http\Controllers',
+        'middleware' => [
+            'web', 'bkscms-auth:admins',
+        ],
+    ],
+    function () {
+        Route::post('/admins/{admin}/roles', 'AdminRoleController@assignRoles')
+            ->name('admins.roles.assign');
     }
 );
