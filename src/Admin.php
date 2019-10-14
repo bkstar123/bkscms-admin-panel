@@ -82,7 +82,7 @@ class Admin extends Authenticatable
     {
         $hasCustomAvatar = isset($this->profile->avatar_url) && !empty($this->profile->avatar_url);
         return [
-            'custom' => $hasCustomAvatar ? true : false,
+            'custom' => $hasCustomAvatar,
             'avatar_url' => $hasCustomAvatar ? $this->profile->avatar_url : '/img/default-avatar-160x160.jpg',
             'avatar_path' => $this->profile->avatar_path ?? '',
             'avatar_disk' => $this->profile->avatar_disk ?? ''
