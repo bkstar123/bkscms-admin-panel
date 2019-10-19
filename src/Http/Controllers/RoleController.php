@@ -30,7 +30,7 @@ class RoleController extends Controller
                         'search' => $searchText
                     ]);
         } catch (Exception $e) {
-            $admins = [];
+            $roles = [];
         }
         return view('bkstar123_bkscms_adminpanel::roles.index', compact('roles'));
     }

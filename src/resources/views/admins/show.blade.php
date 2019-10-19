@@ -240,9 +240,7 @@
                                         <i class="fa fa-backward" aria-hidden="true"></i>
                                     </button>
                                     <button type="submit" 
-                                            class="btn btn-sm btn-block btn-success"
-                                            onclick="event.preventDefault();
-                                            $('#multiselect-form').submit();">
+                                            class="btn btn-sm btn-block btn-success">
                                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                                     </button>
                                 </div>
