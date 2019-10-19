@@ -22,13 +22,6 @@ class Admin extends Authenticatable
     const INACTIVE = false;
 
     /**
-     * List of default eager loading relationships
-     *
-     * @var array
-     */
-    protected $with = ['profile'];
-
-    /**
      * List of columns for search enabling
      *
      * @var array
