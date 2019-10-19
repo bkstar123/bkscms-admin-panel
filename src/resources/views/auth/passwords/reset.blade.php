@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('cms.layouts.master')
 @section('title', 'Reset password')
 
 @section('content')

@@ -48,6 +48,7 @@ class AdminProfileController extends Controller
     public function uploadAvatar(Request $request, FileUpload $fileupload)
     {
         $res = $fileupload->handle($request, 'avatar', [
+            'directory' => 'admin-avatars',
             'allowedExtensions' => config('bkstar123_bkscms_adminpanel.avatarAllowedExtensions'),
             'maxFileSize' => config('bkstar123_bkscms_adminpanel.avatarMaxSize')
 

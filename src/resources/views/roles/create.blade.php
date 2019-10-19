@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('cms.layouts.master')
 @section('title', 'Create new authorization role')
 
 @section('content')
