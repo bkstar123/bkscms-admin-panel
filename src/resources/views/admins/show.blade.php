@@ -195,73 +195,21 @@
                     </div>
                     @endif
                     <div class="tab-pane" id="role-assignment">
-                        <form id="multiselect-form" 
-                              method="POST" 
-                              action="{{ route('admins.roles.assign', [
+                        @component('bkstar123_bkscms_adminpanel::components.multiselect', [
+                            'route' => route('admins.roles.assign', [
                                 'admin' => $admin->{$admin->getRouteKeyName()}
-                                ]) }}">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <label for="multiselect">
-                                        Available Roles
-                                    </label>
-                                    <select name="from[]" 
-                                            id="multiselect" 
-                                            class="form-control" 
-                                            size="8" 
-                                            multiple="multiple">
-                                        @foreach($admin->getRoles()['available'] as $roleId => $roleName)
-                                            <option value="{{ $roleId }}">
-                                                {{ $roleName }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="button" 
-                                            id="multiselect_rightAll" 
-                                            class="btn btn-sm btn-primary btn-block">
-                                        <i class="fa fa-forward" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" 
-                                            id="multiselect_rightSelected" 
-                                            class="btn btn-sm btn-primary btn-block">
-                                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" 
-                                            id="multiselect_leftSelected" 
-                                            class="btn btn-sm btn-primary btn-block">
-                                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" 
-                                            id="multiselect_leftAll" 
-                                            class="btn btn-sm btn-primary btn-block">
-                                        <i class="fa fa-backward" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="submit" 
-                                            class="btn btn-sm btn-block btn-success">
-                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                                <div class="col-md-5">
-                                    <label for="multiselect_to">
-                                        Assigned Roles
-                                    </label>
-                                    <select name="to[]" 
-                                            id="multiselect_to" 
-                                            class="form-control" 
-                                            size="8" 
-                                            multiple="multiple">
-                                        @foreach($admin->getRoles()['assigned'] as $roleId => $roleName)
-                                            <option value="{{ $roleId }}">
-                                                {{ $roleName }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
+                            ]),
+                            'leftItems' => $admin->getRoles()['available'],
+                            'rightItems' => $admin->getRoles()['assigned']
+                        ])
+                            @slot('left_label')
+                                Available Roles
+                            @endslot
+
+                            @slot('right_label')
+                                Assigned Roles
+                            @endslot
+                        @endcomponent
                     </div>
                 </div>
             </div>
