@@ -1,7 +1,6 @@
 <?php
 /**
- * FormRequest - SendResetPasswordLink
- * For building complex validation rules and/or authorization rules for sending reset password link
+ * SendResetPasswordLink - FormRequest
  *
  * @author: tuanha
  * @last-mod: 15-Sept-2019

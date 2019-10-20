@@ -1,20 +1,19 @@
 <?php
 /**
- * AdminController
+ * PermissionController
  *
  * @author: tuanha
- * @last-mod: 06-Oct-2019
+ * @last-mod: 20-Oct-2019
  */
 namespace Bkstar123\BksCMS\AdminPanel\Http\Controllers;
 
 use Exception;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Bkstar123\BksCMS\AdminPanel\Admin;
-use Bkstar123\BksCMS\AdminPanel\Http\Requests\StoreAdmin;
-use Bkstar123\BksCMS\AdminPanel\Http\Requests\ChangePassword;
+use Bkstar123\BksCMS\AdminPanel\Permission;
+use Bkstar123\BksCMS\AdminPanel\Http\Requests\StorePermission;
+use Bkstar123\BksCMS\AdminPanel\Http\Requests\UpdatePermission;
 
-class AdminController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,15 +24,15 @@ class AdminController extends Controller
     {
         $searchText = request()->input('search');
         try {
-            $admins = Admin::search($searchText)
+            $permissions = Permission::search($searchText)
                     ->simplePaginate(config('bkstar123_bkscms_adminpanel.pageSize'))
                     ->appends([
                         'search' => $searchText
                     ]);
         } catch (Exception $e) {
-            $admins = [];
+            $permissions = [];
         }
-        return view('bkstar123_bkscms_adminpanel::admins.index', compact('admins'));
+        return view('bkstar123_bkscms_adminpanel::permissions.index', compact('permissions'));
     }
 
     /**
@@ -43,22 +42,20 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('bkstar123_bkscms_adminpanel::admins.create');
+        return view('bkstar123_bkscms_adminpanel::permissions.create');
     }
 
     /**
      * Store a resource
      *
-     * @param \Bkstar123\BksCMS\AdminPanel\Http\Requests\StoreAdmin $request
+     * @param \Bkstar123\BksCMS\AdminPanel\Http\Requests\StorePermission $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAdmin $request)
+    public function store(StorePermission $request)
     {
         try {
-            $data = $request->all();
-            $data['password'] = bcrypt($request->password);
-            $admin = Admin::create($data);
-            flashing("New admin account for $admin->email has been created")
+            $permission = Permission::create($request->all());
+            flashing("New permission $permission->alias has been created")
                 ->success()
                 ->flash();
         } catch (Exception $e) {
@@ -72,26 +69,26 @@ class AdminController extends Controller
     /**
      * Show a resource
      *
-     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
+     * @param \Bkstar123\BksCMS\AdminPanel\Permission $permission
      * @return \Illuminate\Http\Response
      */
-    public function show(Admin $admin)
+    public function show(Permission $permission)
     {
-        return view('bkstar123_bkscms_adminpanel::admins.show', compact('admin'));
+        return view('bkstar123_bkscms_adminpanel::permissions.show', compact('permission'));
     }
 
     /**
      * Update a resource
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
+     * @param \Bkstar123\BksCMS\AdminPanel\Http\Requests\UpdatePermission $request
+     * @param \Bkstar123\BksCMS\AdminPanel\Permission $permission
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Admin $admin)
+    public function update(UpdatePermission $request, Permission $permission)
     {
         try {
-            $admin->update($request->all());
-            flashing("The profile of $admin->name has been successfully updated")
+            $permission->update($request->all());
+            flashing("The permission $permission->alias's metadata has been successfully updated")
                 ->success()
                 ->flash();
         } catch (Exception $e) {
@@ -105,14 +102,14 @@ class AdminController extends Controller
     /**
      * Destroy a resource
      *
-     * @param \Blstar123\BksCMS\AdminPanel\Admin $admin
+     * @param \Blstar123\BksCMS\AdminPanel\Permission $permission
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Admin $admin)
+    public function destroy(Permission $permission)
     {
         try {
-            $admin->delete();
-            flashing("The account $admin->email has been successfully removed")
+            $permission->delete();
+            flashing("The permission $permission->alias has been successfully removed")
                 ->success()
                 ->flash();
         } catch (Exception $e) {
@@ -120,9 +117,9 @@ class AdminController extends Controller
                 ->error()
                 ->flash();
         }
-        return back()->getTargetUrl() != route('admins.show', [
-            'admin' => $admin->{$admin->getRouteKeyName()}
-        ]) ? back() : redirect()->route('admins.index');
+        return back()->getTargetUrl() != route('permissions.show', [
+            'permission' => $permission->{$permission->getRouteKeyName()}
+        ]) ? back() : redirect()->route('permissions.index');
     }
     
     /**
@@ -134,7 +131,7 @@ class AdminController extends Controller
     {
         $Ids = explode(',', request()->input('Ids'));
         try {
-            Admin::destroy($Ids);
+            Permission::destroy($Ids);
             flashing('All selected resources have been removed')
                 ->success()
                 ->flash();
@@ -147,17 +144,17 @@ class AdminController extends Controller
     }
 
     /**
-     * Disabling the given admin account
+     * Disabling the given permission
      *
-     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
+     * @param \Bkstar123\BksCMS\AdminPanel\Permission $permission
      * @return \Illuminate\Http\Response
      */
-    public function offStatus(Admin $admin)
+    public function offStatus(Permission $permission)
     {
-        $admin->status = Admin::INACTIVE;
+        $permission->status = Permission::DISABLED;
         try {
-            $admin->save();
-            flashing("The account $admin->email has been successfully disabled")
+            $permission->save();
+            flashing("The permission $permission->alias has been successfully disabled")
                 ->success()
                 ->flash();
         } catch (Exception $e) {
@@ -169,40 +166,17 @@ class AdminController extends Controller
     }
 
     /**
-     * Enabling the given admin account
+     * Enabling the given permission
      *
-     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
+     * @param \Bkstar123\BksCMS\AdminPanel\Permission $permission
      * @return \Illuminate\Http\Response
      */
-    public function onStatus(Admin $admin)
+    public function onStatus(Permission $permission)
     {
-        $admin->status = Admin::ACTIVE;
+        $permission->status = Permission::ENABLED;
         try {
-            $admin->save();
-            flashing("The account $admin->email has been successfully enabled")
-                ->success()
-                ->flash();
-        } catch (Exception $e) {
-            flashing("The submitted action failed to be executed due to some unknown error")
-                ->error()
-                ->flash();
-        }
-        return back();
-    }
-
-    /**
-     * Update password
-     *
-     * @param \Bkstar123\BksCMS\AdminPanel\Http\Requests\ChangePassword $request
-     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function changePassword(ChangePassword $request, Admin $admin)
-    {
-        $admin->password = bcrypt($request->password);
-        try {
-            $admin->save();
-            flashing("The password for account $admin->email has been successfully updated")
+            $permission->save();
+            flashing("The permission $permission->alias has been successfully enabled")
                 ->success()
                 ->flash();
         } catch (Exception $e) {

@@ -1,5 +1,5 @@
 @extends('cms.layouts.master')
-@section('title', "Role: $role->role")
+@section('title', "Permission: $permission->alias")
 
 @section('content')
 <div class="row">
@@ -8,25 +8,28 @@
         <div class="card card-primary card-outline">
             <div class="card-body box-profile">
                 <div class="text-center">
-                    <span class="fa fa-user-circle"></span>
+                    <span class="fa fa-universal-access"></span>
                 </div>
                 <h3 class="profile-username text-center">
-                    {{ $role->role }}
+                    {{ $permission->permission }}
+                    <div class="text-center">
+                        <h6>({{ $permission->alias }})</h6>
+                    </div>
                 </h3>
                 <p class="text-muted text-center">
-                    {{ $role->description }}
+                    {{ $permission->description }}
                 </p>   
-                @if($role->status)
-                    {{ CrudView::activeStatus($role, route('roles.disabling', [
-                        'role' => $role->{$role->getRouteKeyName()}
+                @if($permission->status)
+                    {{ CrudView::activeStatus($permission, route('permissions.disabling', [
+                        'permission' => $permission->{$permission->getRouteKeyName()}
                     ])) }}
                 @else
-                    {{ CrudView::disabledStatus($role, route('roles.activating', [
-                        'role' => $role->{$role->getRouteKeyName()}
+                    {{ CrudView::disabledStatus($permission, route('permissions.activating', [
+                        'permission' => $permission->{$permission->getRouteKeyName()}
                     ])) }}
                 @endif
-                {{ CrudView::removeBtn($role, route('roles.destroy', [
-                    'role' => $role->{$role->getRouteKeyName()}
+                {{ CrudView::removeBtn($permission, route('permissions.destroy', [
+                    'permission' => $permission->{$permission->getRouteKeyName()}
                 ])) }}
             </div><!-- /.card-body -->
         </div><!-- /.card -->
@@ -37,25 +40,18 @@
                 <ul class="nav nav-pills">
                     <li class="nav-item">
                         <a class="nav-link active" 
-                           href="#update-role-metadata" 
+                           href="#update-permission-metadata" 
                            data-toggle="tab">
-                            Update Role's Metadata
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" 
-                           href="#update-role-permissions" 
-                           data-toggle="tab">
-                            Update Role's Permissions 
+                            Update Permission
                         </a>
                     </li>
                 </ul>
             </div><!-- /.card-header -->
             <div class="card-body">
                 <div class="tab-content">
-                    <div class="active tab-pane" id="update-role-metadata">
-                        <form action="{{ route('roles.update', [
-                            'role' => $role->{$role->getRouteKeyName()}
+                    <div class="active tab-pane" id="update-permission-metadata">
+                        <form action="{{ route('permissions.update', [
+                            'permission' => $permission->{$permission->getRouteKeyName()}
                             ]) }}" 
                               method="POST"
                               class="form-horizontal">
@@ -64,12 +60,27 @@
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <input type="text" 
-                                           id="role" 
-                                           name="role"
-                                           value="{{ old('role') ?? $role->role }}"
-                                           class="form-control @error('role') is-invalid @enderror" 
-                                           placeholder="New Role Name">
-                                    @error('role')
+                                           id="permission" 
+                                           name="permission"
+                                           value="{{ old('permission') ?? $permission->permission }}"
+                                           class="form-control @error('permission') is-invalid @enderror" 
+                                           placeholder="New permission name">
+                                    @error('permission')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <input type="text" 
+                                           id="alias" 
+                                           name="alias"
+                                           value="{{ old('alias') ?? $permission->alias }}"
+                                           class="form-control @error('alias') is-invalid @enderror" 
+                                           placeholder="New permission alias">
+                                    @error('alias')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -83,7 +94,7 @@
                                               cols="30" 
                                               required 
                                               class="form-control @error('description') is-invalid @enderror" 
-                                              placeholder="Role description">{{ old('description') ?? $role->description }}</textarea>
+                                              placeholder="Permission description">{{ old('description') ?? $permission->description }}</textarea>
                                     @error('description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -102,39 +113,9 @@
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane" id="update-role-permissions">
-                        @component('bkstar123_bkscms_adminpanel::components.multiselect', [
-                            'route' => route('roles.permissions.assign', [
-                                'role' => $role->{$role->getRouteKeyName()}
-                            ]),
-                            'leftItems' => $role->getPermissions()['available'],
-                            'rightItems' => $role->getPermissions()['assigned']
-                        ])
-                            @slot('left_label')
-                                Available Permissions
-                            @endslot
-
-                            @slot('right_label')
-                                Assigned Permission
-                            @endslot
-                        @endcomponent
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
-
-@push('scriptBottom')
-<script type="text/javascript">
-$(document).ready(function () {
-    $('#multiselect').multiselect({
-        search: {
-            left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
-            right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
-        }
-    });
-});
-</script>
-@endpush

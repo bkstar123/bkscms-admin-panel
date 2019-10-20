@@ -15,7 +15,7 @@ use Bkstar123\BksCMS\AdminPanel\Admin;
 class AdminRoleController extends Controller
 {
     /**
-     * assign roles to the admin
+     * Assign roles to the admin
      *
      * @param \Illuminate\Http\Request $request
      * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
@@ -30,10 +30,16 @@ class AdminRoleController extends Controller
         $assignedRoles = array_intersect($assignedRoles, $allRoles);
         // reset array keys
         $assignedRoles = array_merge($assignedRoles, []);
-        $admin->roles()->sync($assignedRoles);
-        flashing('The role assignment has been successfully executed')
-            ->success()
-            ->flash();
+        try {
+            $admin->roles()->sync($assignedRoles);
+            flashing('The role assignment has been successfully executed')
+                ->success()
+                ->flash();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+        }
         return back();
     }
 }

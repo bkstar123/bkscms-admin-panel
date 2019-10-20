@@ -16,14 +16,14 @@ class RoleObserver
     /**
      * Listen to the Role model deleting event.
      *
-     * @param  App\Modules\AdminAuth\Role $role
+     * @param  \Bkstar123\BksCMS\AdminPanel\Role $role
      * @return void
      */
     public function deleting(Role $role)
     {
         DB::transaction(function () use ($role) {
             $role->admins()->detach();
-            //$role->permissions()->detach();
+            $role->permissions()->detach();
         });
     }
 }

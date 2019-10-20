@@ -1,14 +1,12 @@
 <?php
 /**
- * FormRequest - UpdateRole
- * For building complex validation rules for updating roles
+ * UpdateRole - FormRequest
  *
  * @author: tuanha
  * @last-mod: 14-Oct-2019
  */
 namespace Bkstar123\BksCMS\AdminPanel\Http\Requests;
 
-use Bkstar123\BksCMS\AdminPanel\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRole extends FormRequest
@@ -49,9 +47,9 @@ class UpdateRole extends FormRequest
     public function messages()
     {
         return [
-            'description.regex' => 'Description cannot contain < or >',
-            'role.regex' => 'Role name cannot contain < or >',
-            'role.unique' => 'This role name has already existed',
+            'description.regex' => 'The role description cannot contain <, >',
+            'role.regex' => 'The role cannot contain <, >',
+            'role.unique' => 'The role has already existed',
         ];
     }
 }

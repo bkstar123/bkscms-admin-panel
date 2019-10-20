@@ -1,5 +1,5 @@
 @extends('cms.layouts.master')
-@section('title', 'Create new admin')
+@section('title', 'New Admin')
 
 @section('content')
 <div class="card">

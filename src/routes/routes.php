@@ -120,3 +120,51 @@ Route::group(
             ->name('admins.roles.assign');
     }
 );
+
+/**
+ * Permission management resource routes
+ *
+ */
+Route::group(
+    [
+        'prefix' => 'cms',
+        'namespace' => 'Bkstar123\BksCMS\AdminPanel\Http\Controllers',
+        'middleware' => [
+            'web', 'bkscms-auth:admins',
+        ],
+    ],
+    function () {
+        Route::get('/permissions', 'PermissionController@index')->name('permissions.index');
+        Route::post('/permissions', 'PermissionController@store')->name('permissions.store');
+        Route::get('/permissions/create', 'PermissionController@create')->name('permissions.create');
+        Route::get('/permissions/{permission}', 'PermissionController@show')->name('permissions.show');
+        Route::patch('/permissions/{permission}', 'PermissionController@update')
+            ->name('permissions.update');
+        Route::delete('/permissions/{permission}', 'PermissionController@destroy')->name('permissions.destroy');
+
+        Route::patch('/permissions/{permission}/disabling', 'PermissionController@offStatus')
+            ->name('permissions.disabling');
+        Route::patch('/permissions/{permission}/activating', 'PermissionController@onStatus')
+            ->name('permissions.activating');
+        Route::delete('/permissions', 'PermissionController@massiveDestroy')
+            ->name('permissions.massiveDestroy');
+    }
+);
+
+/**
+ * Permission assignment routes
+ *
+ */
+Route::group(
+    [
+        'prefix' => 'cms',
+        'namespace' => 'Bkstar123\BksCMS\AdminPanel\Http\Controllers',
+        'middleware' => [
+            'web', 'bkscms-auth:admins',
+        ],
+    ],
+    function () {
+        Route::post('/roles/{role}/permissions', 'PermissionRoleController@assignPermissions')
+            ->name('roles.permissions.assign');
+    }
+);

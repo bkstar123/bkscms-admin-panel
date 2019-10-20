@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\View;
 use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Admin;
 use Bkstar123\BksCMS\AdminPanel\Profile;
+use Bkstar123\BksCMS\AdminPanel\Permission;
 use Bkstar123\BksCMS\AdminPanel\Observers\RoleObserver;
 use Bkstar123\BksCMS\AdminPanel\Observers\AdminObserver;
 use Bkstar123\BksCMS\AdminPanel\Observers\ProfileObserver;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\Authenticate;
+use Bkstar123\BksCMS\AdminPanel\Observers\PermissionObserver;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\CheckIfAccountDisabled;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -60,6 +62,7 @@ class AdminPanelServiceProvider extends ServiceProvider
 
         Admin::observe(AdminObserver::class);
         Role::observe(RoleObserver::class);
+        Permission::observe(PermissionObserver::class);
         Profile::observe(ProfileObserver::class);
     }
 

@@ -58,13 +58,12 @@ class RoleController extends Controller
             flashing("New role $role->role has been created")
                 ->success()
                 ->flash();
-            return back();
         } catch (Exception $e) {
             flashing("The submitted action failed to be executed due to some unknown error")
                 ->error()
                 ->flash();
-            return back();
         }
+        return back();
     }
 
     /**
@@ -145,7 +144,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Disabling the given admin account
+     * Disabling the given role
      *
      * @param \Bkstar123\BksCMS\AdminPanel\Role $role
      * @return \Illuminate\Http\Response
@@ -167,7 +166,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Enabling the given admin account
+     * Enabling the given role
      *
      * @param \Bkstar123\BksCMS\AdminPanel\Role $role
      * @return \Illuminate\Http\Response

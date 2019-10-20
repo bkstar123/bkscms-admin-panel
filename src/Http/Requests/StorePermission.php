@@ -1,6 +1,6 @@
 <?php
 /**
- * StoreRole - FormRequest
+ * StorePermission - FormRequest
  *
  * @author: tuanha
  * @last-mod: 14-Oct-2019
@@ -9,7 +9,7 @@ namespace Bkstar123\BksCMS\AdminPanel\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRole extends FormRequest
+class StorePermission extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,8 @@ class StoreRole extends FormRequest
     public function rules()
     {
         return [
-            'role' => 'bail|required|string|regex:/^[^<>]*$/|max:255|unique:roles',
+            'permission' => 'bail|required|string|regex:/^[^<>]*$/|max:255|unique:permissions',
+            'alias' => 'bail|required|string|regex:/^[^<> ]*$/|max:255|unique:permissions',
             'description' => 'bail|required|string|regex:/^[^<>]*$/',
         ];
     }
@@ -42,9 +43,11 @@ class StoreRole extends FormRequest
     public function messages()
     {
         return [
-            'description.regex' => 'Description cannot contain < or >',
-            'role.regex' => 'Role name cannot contain < or >',
-            'role.unique' => 'This role name has already existed',
+            'permission.regex' => 'The permission cannot contain <, >',
+            'permission.unique' => 'The permission has already existed',
+            'alias.regex' => 'The permission alias cannot contain <, > or spaces',
+            'alias.unique' => 'The permission alias has already existed',
+            'description.regex' => 'The description cannot contain <, >',
         ];
     }
 }

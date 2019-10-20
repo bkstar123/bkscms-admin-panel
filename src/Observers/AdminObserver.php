@@ -16,7 +16,7 @@ class AdminObserver
     /**
      * Listen to the Admin model deleting event.
      *
-     * @param  Bkstar123\BksCMS\AdminPanel\Admin $admin
+     * @param  \Bkstar123\BksCMS\AdminPanel\Admin $admin
      * @return void
      */
     public function deleting(Admin $admin)
