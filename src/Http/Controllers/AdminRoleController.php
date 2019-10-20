@@ -11,9 +11,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Admin;
+use Bkstar123\BksCMS\AdminPanel\Traits\AuthorizationShield;
 
 class AdminRoleController extends Controller
 {
+    use AuthorizationShield;
+
     /**
      * Assign roles to the admin
      *
@@ -23,9 +26,15 @@ class AdminRoleController extends Controller
      */
     public function assignRoles(Request $request, Admin $admin)
     {
+        $this->capabilityCheck('assignRoles', $admin);
         $assignedRoles = $request->input('to', []);
         $allRoles = Role::enabled()->get()->pluck('id')->toArray();
-
+        $currentAdmin = auth()->guard('admins')->user();
+        if ($currentAdmin->hasRole(2)) {
+            $assignedRoles = array_diff($assignedRoles, [1]);
+        } elseif (!$currentAdmin->hasRole(2) && !$currentAdmin->hasRole(1)) {
+            $assignedRoles = array_diff($assignedRoles, [1, 2]);
+        }
         // Make sure that assigned roles really exist
         $assignedRoles = array_intersect($assignedRoles, $allRoles);
         // reset array keys

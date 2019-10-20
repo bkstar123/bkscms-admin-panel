@@ -11,6 +11,7 @@ use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Admin;
 use Bkstar123\BksCMS\AdminPanel\Profile;
 use Bkstar123\BksCMS\AdminPanel\Permission;
+use Bkstar123\BksCMS\AdminPanel\Policies\AdminPolicy;
 use Bkstar123\BksCMS\AdminPanel\Observers\RoleObserver;
 use Bkstar123\BksCMS\AdminPanel\Observers\AdminObserver;
 use Bkstar123\BksCMS\AdminPanel\Observers\ProfileObserver;
@@ -28,7 +29,7 @@ class AdminPanelServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        //
+        Admin::class => AdminPolicy::class,
     ];
 
     /**

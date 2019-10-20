@@ -10,12 +10,13 @@ use Bkstar123\BksCMS\AdminPanel\Profile;
 use Illuminate\Notifications\Notifiable;
 use Bkstar123\MySqlSearch\Traits\MySqlSearch;
 use Bkstar123\LaravelUploader\Contracts\FileUpload;
+use Bkstar123\BksCMS\AdminPanel\Traits\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Bkstar123\BksCMS\AdminPanel\Notifications\ResetPassword as ResetPasswordNotification;
 
 class Admin extends Authenticatable
 {
-    use Notifiable, MySqlSearch;
+    use Notifiable, MySqlSearch, Authorizable;
 
     const ACTIVE = true;
 
@@ -136,6 +137,13 @@ class Admin extends Authenticatable
     {
         $assignedRoles = $this->roles()->enabled()->get()->pluck('role', 'id')->toArray();
         $allRoles = Role::enabled()->get()->pluck('role', 'id')->toArray();
+        $currentAdmin = auth()->guard('admins')->user();
+        if ($currentAdmin->hasRole(2)) {
+            unset($allRoles[1]);
+        } elseif (!$currentAdmin->hasRole(2) && !$currentAdmin->hasRole(1)) {
+            unset($allRoles[1]);
+            unset($allRoles[2]);
+        }
         $availableRoles = array_diff($allRoles, $assignedRoles);
         return [
             'available' => $availableRoles,

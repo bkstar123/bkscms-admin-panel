@@ -12,10 +12,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Bkstar123\BksCMS\AdminPanel\Admin;
 use Bkstar123\BksCMS\AdminPanel\Http\Requests\StoreAdmin;
+use Bkstar123\BksCMS\AdminPanel\Traits\AuthorizationShield;
 use Bkstar123\BksCMS\AdminPanel\Http\Requests\ChangePassword;
 
 class AdminController extends Controller
 {
+    use AuthorizationShield;
+
     /**
      * Display a listing of the resource.
      *
@@ -23,6 +26,7 @@ class AdminController extends Controller
      */
     public function index()
     {
+        $this->capabilityCheck('index', Admin::class);
         $searchText = request()->input('search');
         try {
             $admins = Admin::search($searchText)
@@ -43,6 +47,7 @@ class AdminController extends Controller
      */
     public function create()
     {
+        $this->capabilityCheck('create', Admin::class);
         return view('bkstar123_bkscms_adminpanel::admins.create');
     }
 
@@ -54,6 +59,7 @@ class AdminController extends Controller
      */
     public function store(StoreAdmin $request)
     {
+        $this->capabilityCheck('create', Admin::class);
         try {
             $data = $request->all();
             $data['password'] = bcrypt($request->password);
@@ -77,29 +83,8 @@ class AdminController extends Controller
      */
     public function show(Admin $admin)
     {
+        $this->capabilityCheck('view', $admin);
         return view('bkstar123_bkscms_adminpanel::admins.show', compact('admin'));
-    }
-
-    /**
-     * Update a resource
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Bkstar123\BksCMS\AdminPanel\Admin $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Admin $admin)
-    {
-        try {
-            $admin->update($request->all());
-            flashing("The profile of $admin->name has been successfully updated")
-                ->success()
-                ->flash();
-        } catch (Exception $e) {
-            flashing("The submitted action failed to be executed due to some unknown error")
-                ->error()
-                ->flash();
-        }
-        return back();
     }
 
     /**
@@ -110,6 +95,7 @@ class AdminController extends Controller
      */
     public function destroy(Admin $admin)
     {
+        $this->capabilityCheck('delete', $admin);
         try {
             $admin->delete();
             flashing("The account $admin->email has been successfully removed")
@@ -132,6 +118,7 @@ class AdminController extends Controller
      */
     public function massiveDestroy()
     {
+        $this->capabilityCheck('massiveDelete', Admin::class);
         $Ids = explode(',', request()->input('Ids'));
         try {
             Admin::destroy($Ids);
@@ -154,6 +141,7 @@ class AdminController extends Controller
      */
     public function offStatus(Admin $admin)
     {
+        $this->capabilityCheck('deactivate', $admin);
         $admin->status = Admin::INACTIVE;
         try {
             $admin->save();
@@ -176,6 +164,7 @@ class AdminController extends Controller
      */
     public function onStatus(Admin $admin)
     {
+        $this->capabilityCheck('activate', $admin);
         $admin->status = Admin::ACTIVE;
         try {
             $admin->save();
@@ -199,6 +188,7 @@ class AdminController extends Controller
      */
     public function changePassword(ChangePassword $request, Admin $admin)
     {
+        $this->capabilityCheck('changePassword', $admin);
         $admin->password = bcrypt($request->password);
         try {
             $admin->save();

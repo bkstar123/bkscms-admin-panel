@@ -12,9 +12,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Bkstar123\BksCMS\AdminPanel\Admin;
 use Bkstar123\LaravelUploader\Contracts\FileUpload;
+use Bkstar123\BksCMS\AdminPanel\Traits\AuthorizationShield;
 
 class AdminProfileController extends Controller
 {
+    use AuthorizationShield;
+    
     /**
      * Update a resource
      *
@@ -24,6 +27,7 @@ class AdminProfileController extends Controller
      */
     public function update(Request $request, Admin $admin)
     {
+        $this->capabilityCheck('update', $admin);
         try {
             $admin->profile()->updateOrCreate([
                 'admin_id' => $admin->id
