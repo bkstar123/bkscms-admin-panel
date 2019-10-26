@@ -33,7 +33,7 @@ class AdminPolicy
      */
     public function index(Admin $currentAdmin)
     {
-        return $this->commonPolicy($currentAdmin, null, 'admins.index');
+        return $this->commonRule($currentAdmin, null, 'admins.index');
     }
     
     /**
@@ -45,7 +45,7 @@ class AdminPolicy
      */
     public function view(Admin $currentAdmin, Admin $targetAdmin)
     {
-        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.view');
+        return $this->commonRule($currentAdmin, $targetAdmin, 'admins.view');
     }
 
     /**
@@ -56,7 +56,7 @@ class AdminPolicy
      */
     public function create(Admin $currentAdmin)
     {
-        return $this->commonPolicy($currentAdmin, null, 'admins.create');
+        return $this->commonRule($currentAdmin, null, 'admins.create');
     }
 
     /**
@@ -68,7 +68,7 @@ class AdminPolicy
      */
     public function update(Admin $currentAdmin, Admin $targetAdmin)
     {
-        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.update');
+        return $this->commonRule($currentAdmin, $targetAdmin, 'admins.update');
     }
 
     /**
@@ -80,7 +80,7 @@ class AdminPolicy
      */
     public function delete(Admin $currentAdmin, Admin $targetAdmin)
     {
-        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.delete');
+        return $this->commonRule($currentAdmin, $targetAdmin, 'admins.delete');
     }
 
     /**
@@ -103,7 +103,7 @@ class AdminPolicy
      */
     public function activate(Admin $currentAdmin, Admin $targetAdmin)
     {
-        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.activate');
+        return $this->commonRule($currentAdmin, $targetAdmin, 'admins.activate');
     }
 
     /**
@@ -115,7 +115,7 @@ class AdminPolicy
      */
     public function deactivate(Admin $currentAdmin, Admin $targetAdmin)
     {
-        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.deactivate');
+        return $this->commonRule($currentAdmin, $targetAdmin, 'admins.deactivate');
     }
 
     /**
@@ -127,7 +127,7 @@ class AdminPolicy
      */
     public function changePassword(Admin $currentAdmin, Admin $targetAdmin)
     {
-        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.changePassword');
+        return $this->commonRule($currentAdmin, $targetAdmin, 'admins.changePassword');
     }
 
     /**
@@ -149,7 +149,7 @@ class AdminPolicy
      * @param  string  $permissionAlias
      * @return bool
      */
-    protected function commonPolicy($currentAdmin, $targetAdmin = null, $permissionAlias)
+    protected function commonRule($currentAdmin, $targetAdmin = null, $permissionAlias)
     {
         if (is_null($targetAdmin)) {
             return $currentAdmin->hasPermission($permissionAlias);
