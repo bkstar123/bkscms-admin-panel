@@ -84,4 +84,14 @@ class Role extends Model
             'assigned' => $assignedPermissions
         ];
     }
+
+    /**
+     * Check if the role is one of the built-in ones i.e superadmins or administrators
+     *
+     * @return bool
+     */
+    public function isReserved()
+    {
+        return $this->id === static::SUPERADMINS || $this->id === static::ADMINISTRATORS;
+    }
 }

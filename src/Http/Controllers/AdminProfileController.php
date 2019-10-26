@@ -68,8 +68,8 @@ class AdminProfileController extends Controller
             'avatar_disk' => $res['disk']
         ];
         $currentAvatar = auth()->guard('admins')->user()->getAvatar();
-        auth()->guard('admins')->user()->profile()->updateOrCreate([
-             'admin_id' => auth()->guard('admins')->id()
+        auth()->user()->profile()->updateOrCreate([
+             'admin_id' => auth()->id()
         ], $data);
         if ($currentAvatar['custom']) {
             $fileupload->delete($currentAvatar['avatar_disk'], $currentAvatar['avatar_path']);

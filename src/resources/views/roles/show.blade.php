@@ -42,6 +42,7 @@
                             Update Role's Metadata
                         </a>
                     </li>
+                    @if(!$role->isReserved())
                     <li class="nav-item">
                         <a class="nav-link" 
                            href="#update-role-permissions" 
@@ -49,6 +50,7 @@
                             Update Role's Permissions 
                         </a>
                     </li>
+                    @endif
                 </ul>
             </div><!-- /.card-header -->
             <div class="card-body">
@@ -102,6 +104,7 @@
                             </div>
                         </form>
                     </div>
+                    @if(!$role->isReserved())
                     <div class="tab-pane" id="update-role-permissions">
                         @component('bkstar123_bkscms_adminpanel::components.multiselect', [
                             'route' => route('roles.permissions.assign', [
@@ -119,6 +122,7 @@
                             @endslot
                         @endcomponent
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

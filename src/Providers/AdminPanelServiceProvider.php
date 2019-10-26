@@ -58,7 +58,7 @@ class AdminPanelServiceProvider extends ServiceProvider
          * Binding $authAdmin to all views
          */
         View::composer('*', function ($view) {
-            $view->with('authAdmin', Auth::guard('admins')->user());
+            $view->with('authAdmin', Auth::user());
         });
 
         Admin::observe(AdminObserver::class);

@@ -31,10 +31,16 @@ class PermissionRoleController extends Controller
         // reset array keys
         $assignedPermissions = array_merge($assignedPermissions, []);
         try {
-            $role->permissions()->sync($assignedPermissions);
-            flashing('The permission assignment has been successfully executed')
-                ->success()
-                ->flash();
+            if (!$role->isReserved()) {
+                $role->permissions()->sync($assignedPermissions);
+                flashing('The permission assignment has been successfully executed')
+                    ->success()
+                    ->flash();
+            } else {
+                flashing('Cannot assign permissions to the built-in roles')
+                    ->info()
+                    ->flash(); 
+            }  
         } catch (Exception $e) {
             flashing("The submitted action failed to be executed due to some unknown error")
                 ->error()
