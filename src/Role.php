@@ -17,8 +17,9 @@ class Role extends Model
     use MySqlSearch;
 
     const ENABLED = true;
-
     const DISABLED = false;
+    const SUPERADMINS = 1;
+    const ADMINISTRATORS = 2;
 
     /**
      * List of columns for search enabling

@@ -3,10 +3,11 @@
  * AdminPolicy - policy
  *
  * @author: tuanha
- * @last-mod: 20-Oct-2019
+ * @last-mod: 26-Oct-2019
  */
 namespace Bkstar123\BksCMS\AdminPanel\Policies;
 
+use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Admin;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -21,7 +22,7 @@ class AdminPolicy
      */
     public function before(Admin $currentAdmin, $ability)
     {
-        return $currentAdmin->hasRole(1) ? true : null;
+        return $currentAdmin->hasRole(Role::SUPERADMINS) ? true : null;
     }
 
     /**
@@ -32,7 +33,7 @@ class AdminPolicy
      */
     public function index(Admin $currentAdmin)
     {
-        return $currentAdmin->hasPermission('admins.index');
+        return $this->commonPolicy($currentAdmin, null, 'admins.index');
     }
     
     /**
@@ -44,15 +45,7 @@ class AdminPolicy
      */
     public function view(Admin $currentAdmin, Admin $targetAdmin)
     {
-        if ($currentAdmin->id === $targetAdmin->id) {
-            return true;
-        } elseif (!$currentAdmin->hasPermission('admins.view')) {
-            return false;
-        } elseif ($currentAdmin->hasRole(2)) {
-            return !$targetAdmin->hasRole(1);
-        } else {
-            return !$targetAdmin->hasRole(1) && !$targetAdmin->hasRole(2);
-        }
+        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.view');
     }
 
     /**
@@ -63,7 +56,7 @@ class AdminPolicy
      */
     public function create(Admin $currentAdmin)
     {
-        return $currentAdmin->hasPermission('admins.create');
+        return $this->commonPolicy($currentAdmin, null, 'admins.create');
     }
 
     /**
@@ -75,15 +68,7 @@ class AdminPolicy
      */
     public function update(Admin $currentAdmin, Admin $targetAdmin)
     {
-        if ($currentAdmin->id === $targetAdmin->id) {
-            return true;
-        } elseif (!$currentAdmin->hasPermission('admins.update')) {
-            return false;
-        } elseif ($currentAdmin->hasRole(2)) {
-            return !$targetAdmin->hasRole(1);
-        } else {
-            return !$targetAdmin->hasRole(1) && !$targetAdmin->hasRole(2);
-        }
+        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.update');
     }
 
     /**
@@ -95,15 +80,7 @@ class AdminPolicy
      */
     public function delete(Admin $currentAdmin, Admin $targetAdmin)
     {
-        if ($currentAdmin->id === $targetAdmin->id) {
-            return true;
-        } elseif (!$currentAdmin->hasPermission('admins.delete')) {
-            return false;
-        } elseif ($currentAdmin->hasRole(2)) {
-            return !$targetAdmin->hasRole(1);
-        } else {
-            return !$targetAdmin->hasRole(1) && !$targetAdmin->hasRole(2);
-        }
+        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.delete');
     }
 
     /**
@@ -126,15 +103,7 @@ class AdminPolicy
      */
     public function activate(Admin $currentAdmin, Admin $targetAdmin)
     {
-        if ($currentAdmin->id === $targetAdmin->id) {
-            return true;
-        } elseif (!$currentAdmin->hasPermission('admins.activate')) {
-            return false;
-        } elseif ($currentAdmin->hasRole(2)) {
-            return !$targetAdmin->hasRole(1);
-        } else {
-            return !$targetAdmin->hasRole(1) && !$targetAdmin->hasRole(2);
-        }
+        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.activate');
     }
 
     /**
@@ -146,15 +115,7 @@ class AdminPolicy
      */
     public function deactivate(Admin $currentAdmin, Admin $targetAdmin)
     {
-        if ($currentAdmin->id === $targetAdmin->id) {
-            return true;
-        } elseif (!$currentAdmin->hasPermission('admins.deactivate')) {
-            return false;
-        } elseif ($currentAdmin->hasRole(2)) {
-            return !$targetAdmin->hasRole(1);
-        } else {
-            return !$targetAdmin->hasRole(1) && !$targetAdmin->hasRole(2);
-        }
+        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.deactivate');
     }
 
     /**
@@ -166,15 +127,7 @@ class AdminPolicy
      */
     public function changePassword(Admin $currentAdmin, Admin $targetAdmin)
     {
-        if ($currentAdmin->id === $targetAdmin->id) {
-            return true;
-        } elseif (!$currentAdmin->hasPermission('admins.changePassword')) {
-            return false;
-        } elseif ($currentAdmin->hasRole(2)) {
-            return !$targetAdmin->hasRole(1);
-        } else {
-            return !$targetAdmin->hasRole(1) && !$targetAdmin->hasRole(2);
-        }
+        return $this->commonPolicy($currentAdmin, $targetAdmin, 'admins.changePassword');
     }
 
     /**
@@ -186,6 +139,28 @@ class AdminPolicy
      */
     public function assignRoles(Admin $currentAdmin, Admin $targetAdmin)
     {
-        return $currentAdmin->hasRole(2) && !$targetAdmin->hasRole(1);
+        return $currentAdmin->hasRole(Role::ADMINISTRATORS) && !$targetAdmin->hasRole(Role::SUPERADMINS);
+    }
+
+    /**
+     * A common business rule for policy definition
+     * @param  App\Modules\AdminAuth\Admin  $currentAdmin
+     * @param  App\Modules\AdminAuth\Admin  $targetAdmin
+     * @param  string  $permissionAlias
+     * @return bool
+     */
+    protected function commonPolicy($currentAdmin, $targetAdmin = null, $permissionAlias)
+    {
+        if (is_null($targetAdmin)) {
+            return $currentAdmin->hasPermission($permissionAlias);
+        } elseif ($currentAdmin->id === $targetAdmin->id) {
+            return true;
+        } elseif (!$currentAdmin->hasPermission($permissionAlias)) {
+            return false;
+        } elseif ($currentAdmin->hasRole(Role::ADMINISTRATORS)) {
+            return !$targetAdmin->hasRole(Role::SUPERADMINS);
+        } else {
+            return !$targetAdmin->hasRole(Role::SUPERADMINS) && !$targetAdmin->hasRole(Role::ADMINISTRATORS);
+        }
     }
 }

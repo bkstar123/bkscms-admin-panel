@@ -7,6 +7,8 @@
  */
 namespace Bkstar123\BksCMS\AdminPanel\Traits;
 
+use Bkstar123\BksCMS\AdminPanel\Role;
+
 trait Authorizable
 {
     /**
@@ -16,7 +18,6 @@ trait Authorizable
 
     /**
      * Check whether the current admin has the given role specified by $roleID
-     * $roleID = 1 (superadmins), $roleID = 2 (administrators)
      *
      * @param int $roleID
      * @return bool
@@ -35,8 +36,7 @@ trait Authorizable
      */
     public function hasPermission($permissionAlias)
     {
-        // return trueif the current admin has either superadmins or administrators roles
-        if ($this->hasRole(1) || $this->hasRole(2)) {
+        if ($this->hasRole(Role::SUPERADMINS) || $this->hasRole(Role::ADMINISTRATORS)) {
             return true;
         }
         // Further checks for other normal roles
