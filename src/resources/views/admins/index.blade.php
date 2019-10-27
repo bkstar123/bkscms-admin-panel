@@ -11,6 +11,10 @@
                 </h3>
                 @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Admin::class)
                 {{ CrudView::removeAllBtn(route('admins.massiveDestroy')) }}
+                @else
+                <button class="btn btn-danger" disabled>
+                    Remove all
+                </button>
                 @endcan
                 <div class="card-tools">
                     {{ CrudView::searchInput(route('admins.index')) }}
@@ -20,11 +24,9 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr style="background-color: #4681AF; color: white">
-                            @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Admin::class)
                             <th>
                                 {{ CrudView::checkAllBox('danger') }}
                             </th>
-                            @endcan
                             <th>Name</th>
                             <th>Username</th>
                             <th>Email</th>
@@ -35,11 +37,9 @@
                     <tbody>
                         @foreach($admins as $admin)
                         <tr>
-                            @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Admin::class)
                             <td>
                                 {{ CrudView::checkBox($admin, 'danger') }}
                             </td>
-                            @endcan
                             <td>
                                 <a href="{{ route('admins.show', [
                                         'admin' => $admin->{$admin->getRouteKeyName()}
@@ -63,19 +63,37 @@
                             </td>
                             <td>
                                 @if($admin->status)
+                                    @can('deactivate', $admin)
                                     {{ CrudView::activeStatus($admin, route('admins.disabling', [
                                         'admin' => $admin->{$admin->getRouteKeyName()}
                                         ])) }}
+                                    @else
+                                    <button class="btn btn-success" disabled>
+                                        Active
+                                    </button>
+                                    @endcan
                                 @else
+                                    @can('activate', $admin)
                                     {{ CrudView::disabledStatus($admin, route('admins.activating', [
                                         'admin' => $admin->{$admin->getRouteKeyName()}
                                         ])) }}
+                                    @else
+                                    <button class="btn btn-secondary" disabled>
+                                        Disabled
+                                    </button>
+                                    @endcan
                                 @endif
                             </td>
                             <td>
+                                @can('delete', $admin)
                                 {{ CrudView::removeBtn($admin, route('admins.destroy', [
                                     'admin' => $admin->{$admin->getRouteKeyName()}
                                     ])) }}
+                                @else
+                                <button class="btn btn-danger" disabled>
+                                    Remove
+                                </button>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach
