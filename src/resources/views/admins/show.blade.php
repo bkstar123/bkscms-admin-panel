@@ -92,6 +92,7 @@
                         </a>
                     </li>
                     @endif
+                    @can('assignRoles', $admin)
                     <li class="nav-item">
                         <a class="nav-link" 
                            href="#role-assignment" 
@@ -99,6 +100,7 @@
                             Authorization Roles 
                         </a>
                     </li>
+                    @endcan
                 </ul>
             </div><!-- /.card-header -->
             <div class="card-body">
@@ -194,6 +196,7 @@
                                id="avatar">
                     </div>
                     @endif
+                    @can('assignRoles', $admin)
                     <div class="tab-pane" id="role-assignment">
                         @component('bkstar123_bkscms_adminpanel::components.multiselect', [
                             'route' => route('admins.roles.assign', [
@@ -211,6 +214,7 @@
                             @endslot
                         @endcomponent
                     </div>
+                    @endcan
                 </div>
             </div>
         </div>
