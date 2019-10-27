@@ -9,7 +9,9 @@
                 <h3 class="card-title">
                     Admins 
                 </h3>
+                @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Admin::class)
                 {{ CrudView::removeAllBtn(route('admins.massiveDestroy')) }}
+                @endcan
                 <div class="card-tools">
                     {{ CrudView::searchInput(route('admins.index')) }}
                 </div>
@@ -18,9 +20,11 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr style="background-color: #4681AF; color: white">
+                            @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Admin::class)
                             <th>
                                 {{ CrudView::checkAllBox('danger') }}
                             </th>
+                            @endcan
                             <th>Name</th>
                             <th>Username</th>
                             <th>Email</th>
@@ -31,9 +35,11 @@
                     <tbody>
                         @foreach($admins as $admin)
                         <tr>
+                            @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Admin::class)
                             <td>
                                 {{ CrudView::checkBox($admin, 'danger') }}
                             </td>
+                            @endcan
                             <td>
                                 <a href="{{ route('admins.show', [
                                         'admin' => $admin->{$admin->getRouteKeyName()}
