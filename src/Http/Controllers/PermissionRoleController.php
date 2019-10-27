@@ -43,8 +43,8 @@ class PermissionRoleController extends Controller
             } else {
                 flashing('Cannot assign permissions to the built-in roles')
                     ->info()
-                    ->flash(); 
-            }  
+                    ->flash();
+            }
         } catch (Exception $e) {
             flashing("The submitted action failed to be executed due to some unknown error")
                 ->error()

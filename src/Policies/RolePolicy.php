@@ -150,7 +150,7 @@ class RolePolicy
      */
     protected function commonRule($currentAdmin, $role)
     {
-        return !in_array($role->id, [Role::SUPERADMINS, Role::ADMINISTRATORS]) && 
+        return !in_array($role->id, [Role::SUPERADMINS, Role::ADMINISTRATORS]) &&
             ($currentAdmin->hasRole(Role::ADMINISTRATORS) || $currentAdmin->hasRole(Role::SUPERADMINS));
     }
 }
