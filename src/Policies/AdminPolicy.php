@@ -133,8 +133,8 @@ class AdminPolicy
     /**
      * Determine if the current admin can assign roles to the target admin.
      *
-     * @param  App\Modules\AdminAuth\Admin  $currentAdmin
-     * @param  App\Modules\AdminAuth\Admin   $targetAdmin
+     * @param  \Bkstar123\BksCMS\AdminPanel\Admin  $currentAdmin
+     * @param  \Bkstar123\BksCMS\AdminPanel\Admin  $targetAdmin
      * @return bool
      */
     public function assignRoles(Admin $currentAdmin, Admin $targetAdmin)
@@ -143,9 +143,9 @@ class AdminPolicy
     }
 
     /**
-     * A common business rule for policy definition
-     * @param  App\Modules\AdminAuth\Admin  $currentAdmin
-     * @param  App\Modules\AdminAuth\Admin  $targetAdmin
+     * A common business rule for admin policies
+     * @param  \Bkstar123\BksCMS\AdminPanel\Admin  $currentAdmin
+     * @param  \Bkstar123\BksCMS\AdminPanel\Admin  $targetAdmin
      * @param  string  $permissionAlias
      * @return bool
      */

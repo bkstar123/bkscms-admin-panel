@@ -12,9 +12,12 @@ use App\Http\Controllers\Controller;
 use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Http\Requests\StoreRole;
 use Bkstar123\BksCMS\AdminPanel\Http\Requests\UpdateRole;
+use Bkstar123\BksCMS\AdminPanel\Traits\AuthorizationShield;
 
 class RoleController extends Controller
 {
+    use AuthorizationShield;
+
     /**
      * Display a listing of the resource.
      *
@@ -22,6 +25,7 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $this->capabilityCheck('index', Role::class);
         $searchText = request()->input('search');
         try {
             $roles = Role::search($searchText)
@@ -42,6 +46,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $this->capabilityCheck('create', Role::class);
         return view('bkstar123_bkscms_adminpanel::roles.create');
     }
 
@@ -53,6 +58,7 @@ class RoleController extends Controller
      */
     public function store(StoreRole $request)
     {
+        $this->capabilityCheck('create', Role::class);
         try {
             $role = Role::create($request->all());
             flashing("New role $role->role has been created")
@@ -74,6 +80,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $this->capabilityCheck('view', $role);
         return view('bkstar123_bkscms_adminpanel::roles.show', compact('role'));
     }
 
@@ -86,6 +93,7 @@ class RoleController extends Controller
      */
     public function update(UpdateRole $request, Role $role)
     {
+        $this->capabilityCheck('update', $role);
         try {
             $role->update($request->all());
             flashing("The role $role->role's metadata has been successfully updated")
@@ -107,6 +115,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->capabilityCheck('delete', $role);
         try {
             $role->delete();
             flashing("The role $role->role has been successfully removed")
@@ -129,7 +138,10 @@ class RoleController extends Controller
      */
     public function massiveDestroy()
     {
+        $this->capabilityCheck('massiveDelete', Role::class);
         $Ids = explode(',', request()->input('Ids'));
+        $Ids = array_diff($Ids, [Role::SUPERADMINS, ROLE::ADMINISTRATORS]);
+        $Ids = array_merge($Ids, []);
         try {
             Role::destroy($Ids);
             flashing('All selected resources have been removed')
@@ -151,6 +163,7 @@ class RoleController extends Controller
      */
     public function offStatus(Role $role)
     {
+        $this->capabilityCheck('deactivate', $role);
         $role->status = Role::DISABLED;
         try {
             $role->save();
@@ -173,6 +186,7 @@ class RoleController extends Controller
      */
     public function onStatus(Role $role)
     {
+        $this->capabilityCheck('activate', $role);
         $role->status = Role::ENABLED;
         try {
             $role->save();

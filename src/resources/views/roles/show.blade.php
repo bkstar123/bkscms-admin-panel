@@ -28,6 +28,22 @@
                 {{ CrudView::removeBtn($role, route('roles.destroy', [
                     'role' => $role->{$role->getRouteKeyName()}
                 ])) }}
+                @if(count($role->admins) > 0)
+                    <button class="btn btn-primary"
+                            onclick="event.preventDefault(); 
+                            $('#revoke-form-{{ $role->{$role->getRouteKeyName()} }}').submit();">
+                        Revoke
+                    </buttob>
+                    <form id="revoke-form-{{ $role->{$role->getRouteKeyName()} }}" 
+                          action="{{ route('roles.revoke',['role' => $role->{$role->getRouteKeyName()}]) }}" 
+                          method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @else
+                    <button class="btn btn-secondary" disabled>
+                        Un-assigned
+                    </button>
+                @endif
             </div><!-- /.card-body -->
         </div><!-- /.card -->
     </div>

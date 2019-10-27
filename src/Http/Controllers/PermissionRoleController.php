@@ -11,9 +11,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Permission;
+use Bkstar123\BksCMS\AdminPanel\Traits\AuthorizationShield;
 
 class PermissionRoleController extends Controller
 {
+    use AuthorizationShield;
+    
     /**
      * Assign permissions to the role
      *
@@ -23,6 +26,7 @@ class PermissionRoleController extends Controller
      */
     public function assignPermissions(Request $request, Role $role)
     {
+        $this->capabilityCheck('attachPermissions', $role);
         $assignedPermissions = $request->input('to', []);
         $allPermissions = Permission::enabled()->get()->pluck('id')->toArray();
 

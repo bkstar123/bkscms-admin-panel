@@ -98,6 +98,8 @@ Route::group(
             ->name('roles.disabling');
         Route::patch('/roles/{role}/activating', 'RoleController@onStatus')
             ->name('roles.activating');
+        Route::post('roles/revoke/{role}', 'AdminRoleController@revoke')
+            ->name('roles.revoke');
         Route::delete('/roles', 'RoleController@massiveDestroy')
             ->name('roles.massiveDestroy');
     }

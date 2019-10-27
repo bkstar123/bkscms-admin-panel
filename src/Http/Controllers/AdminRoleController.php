@@ -51,4 +51,26 @@ class AdminRoleController extends Controller
         }
         return back();
     }
+
+    /**
+     * revoke a role from all admins
+     *
+     * @param  \Bkstar123\BksCMS\AdminPanel\Role  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function revoke(Role $role)
+    {
+        $this->capabilityCheck('revoke', $role);
+        try {
+            $role->admins()->detach();
+            flashing('The role has been revoked from all relevant admin accounts')
+                ->success()
+                ->flash();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+        }
+        return back();
+    }
 }
