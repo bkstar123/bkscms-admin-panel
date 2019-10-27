@@ -9,7 +9,13 @@
                 <h3 class="card-title">
                     Authorization Roles 
                 </h3>
+                @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Role::class)
                 {{ CrudView::removeAllBtn(route('roles.massiveDestroy')) }}
+                @else
+                <button class="btn btn-danger" disabled>
+                    Remove all
+                </button>
+                @endcan
                 <div class="card-tools">
                     {{ CrudView::searchInput(route('roles.index')) }}
                 </div>
@@ -30,7 +36,12 @@
                         @foreach($roles as $role)
                         <tr>
                             <td>
+                                @if(!in_array($role->id, [
+                                    (Bkstar123\BksCMS\AdminPanel\Role::class)::SUPERADMINS, 
+                                    (Bkstar123\BksCMS\AdminPanel\Role::class)::ADMINISTRATORS
+                                ]))
                                 {{ CrudView::checkBox($role, 'danger') }}
+                                @endif
                             </td>
                             <td>
                                 <a href="{{ route('roles.show', [
@@ -41,19 +52,37 @@
                             </td>
                             <td>
                                 @if($role->status)
+                                    @can('deactivate', $role)
                                     {{ CrudView::activeStatus($role, route('roles.disabling', [
                                         'role' => $role->{$role->getRouteKeyName()}
                                         ])) }}
+                                    @else
+                                    <button class="btn btn-success" disabled>
+                                        Active
+                                    </button>
+                                    @endcan
                                 @else
+                                    @can('activate', $role)
                                     {{ CrudView::disabledStatus($role, route('roles.activating', [
                                         'role' => $role->{$role->getRouteKeyName()}
                                         ])) }}
+                                    @else
+                                    <button class="btn btn-secondary" disabled>
+                                        Disabled
+                                    </button>
+                                    @endcan
                                 @endif
                             </td>
                             <td>
+                                @can('delete', $role)
                                 {{ CrudView::removeBtn($role, route('roles.destroy', [
                                     'role' => $role->{$role->getRouteKeyName()}
                                     ])) }}
+                                @else
+                                <button class="btn btn-danger" disabled>
+                                    Remove
+                                </button>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach
