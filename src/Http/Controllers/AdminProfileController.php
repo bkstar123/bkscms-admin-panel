@@ -67,7 +67,7 @@ class AdminProfileController extends Controller
             'avatar_path' => $res['path'],
             'avatar_disk' => $res['disk']
         ];
-        $currentAvatar = auth()->guard('admins')->user()->getAvatar();
+        $currentAvatar = auth()->user()->getAvatar();
         auth()->user()->profile()->updateOrCreate([
              'admin_id' => auth()->id()
         ], $data);
