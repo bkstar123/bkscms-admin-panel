@@ -10,11 +10,11 @@
                     Admins 
                 </h3>
                 @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Admin::class)
-                {{ CrudView::removeAllBtn(route('admins.massiveDestroy')) }}
+                    {{ CrudView::removeAllBtn(route('admins.massiveDestroy')) }}
                 @else
-                <button class="btn btn-danger" disabled>
-                    Remove all
-                </button>
+                    <button class="btn btn-danger" disabled>
+                        Remove all
+                    </button>
                 @endcan
                 <div class="card-tools">
                     {{ CrudView::searchInput(route('admins.index')) }}

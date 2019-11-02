@@ -11,10 +11,12 @@ use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Admin;
 use Bkstar123\BksCMS\AdminPanel\Profile;
 use Bkstar123\BksCMS\AdminPanel\Permission;
+use Bkstar123\BksCMS\AdminPanel\Policies\RolePolicy;
 use Bkstar123\BksCMS\AdminPanel\Policies\AdminPolicy;
 use Bkstar123\BksCMS\AdminPanel\Observers\RoleObserver;
 use Bkstar123\BksCMS\AdminPanel\Observers\AdminObserver;
 use Bkstar123\BksCMS\AdminPanel\Observers\ProfileObserver;
+use Bkstar123\BksCMS\AdminPanel\Policies\PermissionPolicy;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\Authenticate;
 use Bkstar123\BksCMS\AdminPanel\Observers\PermissionObserver;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\CheckIfAccountDisabled;
@@ -30,6 +32,8 @@ class AdminPanelServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Admin::class => AdminPolicy::class,
+        Role::class => RolePolicy::class,
+        Permission::class => PermissionPolicy::class,
     ];
 
     /**

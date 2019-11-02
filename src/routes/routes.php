@@ -18,22 +18,16 @@ Route::group(
     function () {
         Route::get('/admins/login', 'LoginController@showLoginForm')
             ->name('admins.login');
-
         Route::post('/admins/login', 'LoginController@login');
-
         Route::post('/admins/logout', 'LoginController@logout')
             ->name('admins.logout');
-
         Route::get('/admins/password/reset', 'ForgotPasswordController@showLinkRequestForm')
             ->name('admins.password.request');
-
         Route::post('/admins/password/email', 'ForgotPasswordController@sendResetLinkEmail')
             ->name('admins.password.email')
             ->middleware('bkscms-disabled');
-
         Route::get('/admins/password/reset/{token}', 'ResetPasswordController@showResetForm')
             ->name('admins.password.reset');
-
         Route::post('/admins/password/reset', 'ResetPasswordController@reset')
             ->name('admins.password.update');
     }
@@ -59,7 +53,6 @@ Route::group(
         Route::patch('/admins/{admin}', 'AdminProfileController@update')
             ->name('admins.profile.update');
         Route::delete('/admins/{admin}', 'AdminController@destroy')->name('admins.destroy');
-
         Route::patch('/admins/{admin}/disabling', 'AdminController@offStatus')
             ->name('admins.disabling');
         Route::patch('/admins/{admin}/activating', 'AdminController@onStatus')
@@ -93,20 +86,17 @@ Route::group(
         Route::patch('/roles/{role}', 'RoleController@update')
             ->name('roles.update');
         Route::delete('/roles/{role}', 'RoleController@destroy')->name('roles.destroy');
-
         Route::patch('/roles/{role}/disabling', 'RoleController@offStatus')
             ->name('roles.disabling');
         Route::patch('/roles/{role}/activating', 'RoleController@onStatus')
             ->name('roles.activating');
-        Route::post('roles/revoke/{role}', 'AdminRoleController@revoke')
-            ->name('roles.revoke');
         Route::delete('/roles', 'RoleController@massiveDestroy')
             ->name('roles.massiveDestroy');
     }
 );
 
 /**
- * Role assignment routes
+ * Role assignment/revoke routes
  *
  */
 Route::group(
@@ -120,6 +110,8 @@ Route::group(
     function () {
         Route::post('/admins/{admin}/roles', 'AdminRoleController@assignRoles')
             ->name('admins.roles.assign');
+        Route::post('roles/revoke/{role}', 'AdminRoleController@revoke')
+            ->name('roles.revoke');
     }
 );
 
@@ -143,7 +135,6 @@ Route::group(
         Route::patch('/permissions/{permission}', 'PermissionController@update')
             ->name('permissions.update');
         Route::delete('/permissions/{permission}', 'PermissionController@destroy')->name('permissions.destroy');
-
         Route::patch('/permissions/{permission}/disabling', 'PermissionController@offStatus')
             ->name('permissions.disabling');
         Route::patch('/permissions/{permission}/activating', 'PermissionController@onStatus')
@@ -154,7 +145,7 @@ Route::group(
 );
 
 /**
- * Permission assignment routes
+ * Permission assignment/revoke routes
  *
  */
 Route::group(
@@ -168,5 +159,7 @@ Route::group(
     function () {
         Route::post('/roles/{role}/permissions', 'PermissionRoleController@assignPermissions')
             ->name('roles.permissions.assign');
+        Route::post('permissions/revoke/{permission}', 'PermissionRoleController@revoke')
+            ->name('permissions.revoke');
     }
 );

@@ -10,11 +10,11 @@
                     Authorization Roles 
                 </h3>
                 @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Role::class)
-                {{ CrudView::removeAllBtn(route('roles.massiveDestroy')) }}
+                    {{ CrudView::removeAllBtn(route('roles.massiveDestroy')) }}
                 @else
-                <button class="btn btn-danger" disabled>
-                    Remove all
-                </button>
+                    <button class="btn btn-danger" disabled>
+                        Remove all
+                    </button>
                 @endcan
                 <div class="card-tools">
                     {{ CrudView::searchInput(route('roles.index')) }}

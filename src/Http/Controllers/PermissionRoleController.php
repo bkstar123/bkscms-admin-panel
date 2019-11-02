@@ -52,4 +52,26 @@ class PermissionRoleController extends Controller
         }
         return back();
     }
+
+    /**
+     * revoke a permission from all roles
+     *
+     * @param  \Bkstar123\BksCMS\AdminPanel\Permission $permission
+     * @return \Illuminate\Http\Response
+     */
+    public function revoke(Permission $permission)
+    {
+        $this->capabilityCheck('revoke', $permission);
+        try {
+            $permission->roles()->detach();
+            flashing('The permission has been revoked from all relevant authorization roles')
+                ->success()
+                ->flash();
+        } catch (Exception $e) {
+            flashing("The submitted action failed to be executed due to some unknown error")
+                ->error()
+                ->flash();
+        }
+        return back();
+    }
 }

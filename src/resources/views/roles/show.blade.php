@@ -18,27 +18,27 @@
                 </p>   
                 @if($role->status)
                     @can('deactivate', $role)
-                    {{ CrudView::activeStatus($role, route('roles.disabling', [
-                        'role' => $role->{$role->getRouteKeyName()}
-                    ])) }}
+                        {{ CrudView::activeStatus($role, route('roles.disabling', [
+                            'role' => $role->{$role->getRouteKeyName()}
+                        ])) }}
                     @else
-                    <button class="btn btn-success" disabled>Active</button>
+                        <button class="btn btn-success" disabled>Active</button>
                     @endcan
                 @else
                     @can('activate', $role)
-                    {{ CrudView::disabledStatus($role, route('roles.activating', [
-                        'role' => $role->{$role->getRouteKeyName()}
-                    ])) }}
+                        {{ CrudView::disabledStatus($role, route('roles.activating', [
+                            'role' => $role->{$role->getRouteKeyName()}
+                        ])) }}
                     @else
-                    <button class="btn btn-secondary" disabled>Disabled</button>
+                        <button class="btn btn-secondary" disabled>Disabled</button>
                     @endcan
                 @endif
                 @can('delete', $role)
-                {{ CrudView::removeBtn($role, route('roles.destroy', [
-                    'role' => $role->{$role->getRouteKeyName()}
-                ])) }}
+                    {{ CrudView::removeBtn($role, route('roles.destroy', [
+                        'role' => $role->{$role->getRouteKeyName()}
+                    ])) }}
                 @else
-                <button class="btn btn-danger" disabled>Remove</button>
+                    <button class="btn btn-danger" disabled>Remove</button>
                 @endcan
                 @if(count($role->admins) > 0)
                     <button class="btn btn-primary"

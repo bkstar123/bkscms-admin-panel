@@ -20,17 +20,46 @@
                     {{ $permission->description }}
                 </p>   
                 @if($permission->status)
-                    {{ CrudView::activeStatus($permission, route('permissions.disabling', [
+                    @can('deactivate', $permission)
+                        {{ CrudView::activeStatus($permission, route('permissions.disabling', [
+                            'permission' => $permission->{$permission->getRouteKeyName()}
+                        ])) }}
+                    @else
+                        <button class="btn btn-success" disabled>Active</button>
+                    @endcan
+                @else
+                    @can('activate', $permission)
+                        {{ CrudView::disabledStatus($permission, route('permissions.activating', [
+                            'permission' => $permission->{$permission->getRouteKeyName()}
+                        ])) }}
+                    @else
+                        <button class="btn btn-secondary" disabled>Disabled</button>
+                    @endcan
+                @endif
+                @can('delete', $permission)
+                    {{ CrudView::removeBtn($permission, route('permissions.destroy', [
                         'permission' => $permission->{$permission->getRouteKeyName()}
                     ])) }}
                 @else
-                    {{ CrudView::disabledStatus($permission, route('permissions.activating', [
-                        'permission' => $permission->{$permission->getRouteKeyName()}
-                    ])) }}
+                    <button class="btn btn-danger" disabled>Remove</button>
+                @endcan
+                @if(count($permission->roles) > 0)
+                    <button class="btn btn-primary"
+                            @cannot('revoke', $permission) disabled @endcannot
+                            onclick="event.preventDefault(); 
+                            $('#revoke-form-{{ $permission->{$permission->getRouteKeyName()} }}').submit();">
+                        Revoke
+                    </buttob>
+                    <form id="revoke-form-{{ $permission->{$permission->getRouteKeyName()} }}" 
+                          action="{{ route('permissions.revoke',['permission' => $permission->{$permission->getRouteKeyName()}]) }}" 
+                          method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @else
+                    <button class="btn btn-secondary" disabled>
+                        Un-assigned
+                    </button>
                 @endif
-                {{ CrudView::removeBtn($permission, route('permissions.destroy', [
-                    'permission' => $permission->{$permission->getRouteKeyName()}
-                ])) }}
             </div><!-- /.card-body -->
         </div><!-- /.card -->
     </div>
@@ -106,6 +135,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-10">
                                     <button type="submit" 
+                                            @cannot('update', $permission) disabled @endcannot
                                             class="btn btn-primary">
                                         Submit
                                     </button>

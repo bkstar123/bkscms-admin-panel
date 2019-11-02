@@ -9,7 +9,13 @@
                 <h3 class="card-title">
                     Access Permissions 
                 </h3>
-                {{ CrudView::removeAllBtn(route('permissions.massiveDestroy')) }}
+                @can('massiveDelete', Bkstar123\BksCMS\AdminPanel\Permission::class)
+                    {{ CrudView::removeAllBtn(route('permissions.massiveDestroy')) }}
+                @else
+                    <button class="btn btn-danger" disabled>
+                        Remove all
+                    </button>
+                @endcan
                 <div class="card-tools">
                     {{ CrudView::searchInput(route('permissions.index')) }}
                 </div>
@@ -49,19 +55,37 @@
                             </td>
                             <td>
                                 @if($permission->status)
+                                    @can('deactivate', $permission)
                                     {{ CrudView::activeStatus($permission, route('permissions.disabling', [
                                         'permission' => $permission->{$permission->getRouteKeyName()}
                                         ])) }}
+                                    @else
+                                    <button class="btn btn-success" disabled>
+                                        Active
+                                    </button>
+                                    @endcan
                                 @else
+                                    @can('activate', $permission)
                                     {{ CrudView::disabledStatus($permission, route('permissions.activating', [
                                         'permission' => $permission->{$permission->getRouteKeyName()}
                                         ])) }}
+                                    @else
+                                    <button class="btn btn-secondary" disabled>
+                                        Disabled
+                                    </button>
+                                    @endcan
                                 @endif
                             </td>
                             <td>
+                                @can('delete', $permission)
                                 {{ CrudView::removeBtn($permission, route('permissions.destroy', [
                                     'permission' => $permission->{$permission->getRouteKeyName()}
                                     ])) }}
+                                @else
+                                <button class="btn btn-danger" disabled>
+                                    Remove
+                                </button>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach
