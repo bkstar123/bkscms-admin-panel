@@ -5,7 +5,6 @@
 */
 namespace Bkstar123\BksCMS\AdminPanel\Providers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Admin;
@@ -15,6 +14,7 @@ use Bkstar123\BksCMS\AdminPanel\Policies\RolePolicy;
 use Bkstar123\BksCMS\AdminPanel\Policies\AdminPolicy;
 use Bkstar123\BksCMS\AdminPanel\Observers\RoleObserver;
 use Bkstar123\BksCMS\AdminPanel\Observers\AdminObserver;
+use Bkstar123\BksCMS\AdminPanel\Console\Commands\InitAuth;
 use Bkstar123\BksCMS\AdminPanel\Observers\ProfileObserver;
 use Bkstar123\BksCMS\AdminPanel\Policies\PermissionPolicy;
 use Bkstar123\BksCMS\AdminPanel\Http\Middleware\Authenticate;
@@ -62,13 +62,19 @@ class AdminPanelServiceProvider extends ServiceProvider
          * Binding $authAdmin to all views
          */
         View::composer('*', function ($view) {
-            $view->with('authAdmin', Auth::user());
+            $view->with('authAdmin', auth()->user());
         });
 
         Admin::observe(AdminObserver::class);
         Role::observe(RoleObserver::class);
         Permission::observe(PermissionObserver::class);
         Profile::observe(ProfileObserver::class);
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                InitAuth::class,
+            ]);
+        }
     }
 
     /**

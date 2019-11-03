@@ -23,6 +23,7 @@ class PermissionsTableSeeder extends Seeder
         DB::transaction(function () {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             DB::table('permissions')->truncate();
+            DB::table('permission_role')->truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             $permissions = config('bkstar123_bkscms_adminpanel.permissions');
             foreach ($permissions as $permission) {

@@ -22,6 +22,7 @@ class AdminsTableSeeder extends Seeder
     {
         DB::transaction(function () {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            DB::table('profiles')->truncate();
             DB::table('admins')->truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             DB::table('admins')->insert([
