@@ -1,7 +1,6 @@
 <?php
 /**
 * route middleware - bkscms-disabled
-*
 * @objective: prevents a disabled admin account from requesting for password reset
 *
 * @author: tuanha

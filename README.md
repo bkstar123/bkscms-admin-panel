@@ -32,6 +32,10 @@ php artisan mysql-search:init Bkstar123\BksCMS\AdminPanel\Permission
 
 It will create two users ***superadmin*** & ***administrator*** with passwords ***superadmin1@*** and ***administrator1@*** respectively. You can use these credentials to login and create your own users (you must assign ***superadmins*** role to at least one user). Finally, do not forget to remove/disable the default ***superadmin & administrator*** users for security reason before rolling out to production environment.  
 
-Later, when you add more permissions to **permissions** key in **config/bkstar123_bkscms_adminpanel.php**, you can just run ```php artisan bkscms:initAuth --scope=permissions``` to re-initialize the permissions table
+Later, when you add more permissions to **permissions** key in **config/bkstar123_bkscms_adminpanel.php**, you can just run ```php artisan bkscms:initAuth --scope=permissions``` to re-initialize the permissions table  
+
+**Note**  
+The package provides ***bkscms-auth*** & ***bkscms-guest*** middleware to replace ***auth*** & ***guest*** respectively for all CMS routes (i.e under the path ***/cms/\****)  
+
 
 
