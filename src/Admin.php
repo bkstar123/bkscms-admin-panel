@@ -138,11 +138,11 @@ class Admin extends Authenticatable
         $assignedRoles = $this->roles()->enabled()->get()->pluck('role', 'id')->toArray();
         $allRoles = Role::enabled()->get()->pluck('role', 'id')->toArray();
         $currentAdmin = auth()->guard('admins')->user();
-        if ($currentAdmin->hasRole(2)) {
-            unset($allRoles[1]);
-        } elseif (!$currentAdmin->hasRole(2) && !$currentAdmin->hasRole(1)) {
-            unset($allRoles[1]);
-            unset($allRoles[2]);
+        if (!$currentAdmin->hasRole(Role::SUPERADMINS)) {
+            unset($allRoles[Role::SUPERADMINS]);
+            if (!$currentAdmin->hasRole(Role::ADMINISTRATORS)) {
+                unset($allRoles[Role::ADMINISTRATORS]);
+            }
         }
         $availableRoles = array_diff($allRoles, $assignedRoles);
         return [
