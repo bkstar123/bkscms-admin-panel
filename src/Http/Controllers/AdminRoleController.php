@@ -30,10 +30,11 @@ class AdminRoleController extends Controller
         $assignedRoles = $request->input('to', []);
         $allRoles = Role::enabled()->get()->pluck('id')->toArray();
         $currentAdmin = auth()->user();
-        if ($currentAdmin->hasRole(Role::ADMINISTRATORS)) {
+        if (!$currentAdmin->hasRole(Role::SUPERADMINS)) {
             $assignedRoles = array_diff($assignedRoles, [Role::SUPERADMINS]);
-        } elseif (!$currentAdmin->hasRole(Role::ADMINISTRATORS) && !$currentAdmin->hasRole(Role::SUPERADMINS)) {
-            $assignedRoles = array_diff($assignedRoles, [Role::SUPERADMINS, Role::ADMINISTRATORS]);
+            if (!$currentAdmin->hasRole(Role::ADMINISTRATORS)) {
+                $assignedRoles = array_diff($assignedRoles, [Role::ADMINISTRATORS]);
+            }
         }
         // Make sure that assigned roles really exist
         $assignedRoles = array_intersect($assignedRoles, $allRoles);
