@@ -19,9 +19,9 @@ Then, publish the package's configuration file (you do not need to do it if you 
 The package offers an artisan command ```php artisan bkscms:initAuth --scope=<permissions|all>```  
 
 All the following steps are not required if you run ```php artian bkscms:install``` to install the **BKSCMS** project.  
-- Create database table  
+- Create database tables  
 ```php artisan migrate```  
-- Seed data to ```roles, admins, permissions``` tables and do other arrangements  
+- Seed data to ***roles, admins, permissions*** tables and do other arrangements  
 ```php artisan bkscms:initAuth --scope=all```  
 - Create full-text index for ***roles, permissions, admins*** tables  
 ```php
