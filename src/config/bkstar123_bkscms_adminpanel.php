@@ -27,7 +27,7 @@ return [
     'avatarAllowedExtensions' => ['jpg', 'jpeg', 'png'],
 
     // Use queue for mailing/notification. If so, use the default connection and default queue
-    'useQueue' => false,
+    'useQueue' => env('BKSTAR123_BKSCMS_USE_QUEUE', false),
 
     'permissions' => [
         // admins resource
