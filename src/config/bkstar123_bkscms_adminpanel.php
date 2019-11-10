@@ -26,6 +26,9 @@ return [
     // Avatar allowed extensions
     'avatarAllowedExtensions' => ['jpg', 'jpeg', 'png'],
 
+    // Use queue for mailing/notification. If so, use the default connection and default queue
+    'useQueue' => false,
+
     'permissions' => [
         // admins resource
         [

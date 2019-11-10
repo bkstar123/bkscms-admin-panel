@@ -7,16 +7,12 @@
  */
 namespace Bkstar123\BksCMS\AdminPanel\Notifications;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Auth\Notifications\ResetPassword as BaseResetPasswordNotification;
 
-class ResetPassword extends BaseResetPasswordNotification implements ShouldQueue
+class ResetPassword extends BaseResetPasswordNotification
 {
-    use Queueable;
-
     /**
      * Build the mail representation of the notification.
      *

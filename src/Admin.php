@@ -13,6 +13,7 @@ use Bkstar123\LaravelUploader\Contracts\FileUpload;
 use Bkstar123\BksCMS\AdminPanel\Traits\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Bkstar123\BksCMS\AdminPanel\Notifications\ResetPassword as ResetPasswordNotification;
+use Bkstar123\BksCMS\AdminPanel\Notifications\ResetPasswordWithQueuing as ResetPasswordNotificationWithQueuing;
 
 class Admin extends Authenticatable
 {
@@ -57,7 +58,9 @@ class Admin extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         flashing('A reset password link has been sent')->success()->flash();
-        $this->notify(new ResetPasswordNotification($token));
+        config('bkstar123_bkscms_adminpanel.useQueue') ?
+            $this->notify(new ResetPasswordNotificationWithQueuing($token)) :
+            $this->notify(new ResetPasswordNotification($token));
     }
     
     /**
