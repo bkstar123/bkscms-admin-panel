@@ -235,7 +235,7 @@ $(document).ready(function () {
     @if(auth()->guard('admins')->user()->id === $admin->id)
         $('#avatar').bkstar123_ajaxuploader({
         size: {{ config('bkstar123_bkscms_adminpanel.avatarMaxSize') }},
-        allowedExtensions: {!! json_encode(config('bkstar123_bkscms_adminpanel.avatarAllowedExtensions')) !!},
+        allowedExtensions: @json(config('bkstar123_bkscms_adminpanel.avatarAllowedExtensions')),
         batchSize: 1,
         outerClass: 'col-md-12',
         uploadUrl: '{{ route('admins.avatar.upload') }}',
