@@ -34,6 +34,8 @@ It will create two users ***superadmin*** & ***administrator*** with passwords *
 
 Later, when you add more permissions to **permissions** key in **config/bkstar123_bkscms_adminpanel.php**, you can just run ```php artisan bkscms:initAuth --scope=permissions``` to re-initialize the permissions table  
 
+In the controller, import & use the trait ***Bkstar123\BksCMS\AdminPanel\Traits\AuthorizationShield***, then you can place a call to ```$this->capabilityCheck(<action>, <resource>)``` in every controller action that need to perform authorization check.  
+
 **Note**  
 The package provides ***bkscms-auth*** & ***bkscms-guest*** middleware to replace ***auth*** & ***guest*** respectively for all CMS routes (i.e under the path ***/cms/\****)  
 
