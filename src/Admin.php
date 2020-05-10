@@ -9,7 +9,6 @@ use Bkstar123\BksCMS\AdminPanel\Role;
 use Bkstar123\BksCMS\AdminPanel\Profile;
 use Illuminate\Notifications\Notifiable;
 use Bkstar123\MySqlSearch\Traits\MySqlSearch;
-use Bkstar123\LaravelUploader\Contracts\FileUpload;
 use Bkstar123\BksCMS\AdminPanel\Traits\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Bkstar123\BksCMS\AdminPanel\Notifications\ResetPassword as ResetPasswordNotification;
