@@ -34,7 +34,7 @@
             "Bkstar123\\BksCMS\\AdminPanel\\": "src/"
         },
         "classmap": [
-            "database/seeds"
+            "src/database/seeds"
         ]
     },
     "extra": {
