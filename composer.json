@@ -32,7 +32,10 @@
     "autoload": {
         "psr-4": {
             "Bkstar123\\BksCMS\\AdminPanel\\": "src/"
-        }
+        },
+        "classmap": [
+            "database/seeds"
+        ]
     },
     "extra": {
         "laravel": {

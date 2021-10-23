@@ -5,8 +5,6 @@
  * @author: tuanha
  * @last-mod: 02-Nov-2019
  */
-namespace Bkstar123\BksCMS\AdminPanel\Database\Seeds;
-
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
