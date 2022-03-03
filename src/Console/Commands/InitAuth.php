@@ -8,8 +8,6 @@
 namespace Bkstar123\BksCMS\AdminPanel\Console\Commands;
 
 use Illuminate\Console\Command;
-use Bkstar123\BksCMS\AdminPanel\Database\Seeds\AdminPanelSeeder;
-use Bkstar123\BksCMS\AdminPanel\Database\Seeds\PermissionsTableSeeder;
 
 class InitAuth extends Command
 {
@@ -61,14 +59,14 @@ class InitAuth extends Command
             case 'permissions':
                 $this->info('Populating permissions data...');
                 $this->call('db:seed', [
-                    '--class' => PermissionsTableSeeder::class
+                    '--class' => \PermissionsTableSeeder::class
                 ]);
                 $this->info('Permissions have been populated.');
                 break;
             case 'all':
                 $this->info('Rebuilding auth data...');
                 $this->call('db:seed', [
-                    '--class' => AdminPanelSeeder::class
+                    '--class' => \AdminPanelSeeder::class
                 ]);
                 $this->info('Auth data have been populated');
                 break;
